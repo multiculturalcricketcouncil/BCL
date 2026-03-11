@@ -1,5 +1,6 @@
 name = "bcl-website"
 compatibility_date = "2025-03-10"
+pages_build_output_dir = "."
 
 [vars]
 SITE_NAME = "Brisbane Champions League"
