@@ -22,15 +22,15 @@ html{scroll-behavior:smooth}
 body{
   margin:0;min-height:100vh;color:var(--white);font-family:var(--font-main);
   background:
-    radial-gradient(circle at top left, rgba(37,99,235,0.25), transparent 28%),
-    linear-gradient(180deg, #1b3f97 0%, #12244e 32%, #0F172A 100%);
+    radial-gradient(circle at 12% 0%, rgba(245,158,11,0.22), transparent 34%),
+    radial-gradient(circle at 88% 12%, rgba(59,130,246,0.22), transparent 30%),
+    linear-gradient(180deg, #1d4ed8 0%, #1e3a8a 36%, #0F172A 100%);
 }
 body::before{
   content:"";position:fixed;inset:0;pointer-events:none;
-  background-image:
-    linear-gradient(135deg, rgba(255,255,255,0.08) 25%, transparent 25%),
-    linear-gradient(315deg, rgba(147,197,253,0.08) 25%, transparent 25%);
-  background-size:28px 28px;background-position:0 0,14px 14px;
+  background:
+    radial-gradient(circle at 10% 18%, rgba(255,255,255,0.2), transparent 42%),
+    radial-gradient(circle at 85% 82%, rgba(191,219,254,0.15), transparent 45%);
   mask-image:linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.1) 55%, transparent 90%);
 }
 img{max-width:100%;display:block}
@@ -77,17 +77,17 @@ h1,h2,h3,h4{margin:0 0 .85rem;line-height:1.08;font-weight:800;letter-spacing:-0
   content:"";position:absolute;inset:0;pointer-events:none;
   background:
     radial-gradient(circle at 85% 18%, rgba(245,158,11,.18), transparent 16%),
-    linear-gradient(135deg, rgba(255,255,255,0.08) 25%, transparent 25%),
-    linear-gradient(315deg, rgba(191,219,254,0.08) 25%, transparent 25%);
-  background-size:auto,30px 30px,30px 30px;background-position:0 0,0 0,15px 15px;
+    radial-gradient(circle at 12% 76%, rgba(147,197,253,.22), transparent 30%);
+  background-size:auto;background-position:0 0;
 }
 .hero-copy,.hero-panel{position:relative;z-index:1}
 .hero-copy{display:flex;flex-direction:column;justify-content:space-between;gap:20px}
 .hero-logo-row{
   display:inline-flex;align-items:center;flex-wrap:wrap;gap:14px;width:fit-content;background:transparent;
-  padding:0;border-radius:0;box-shadow:none;
+  padding:12px 16px;border-radius:18px;border:1px solid rgba(255,255,255,.24);
+  background:rgba(255,255,255,.14);backdrop-filter:blur(8px);
 }
-.hero-logo-row img{height:64px;width:auto;display:block}
+.hero-logo-row img{height:72px;width:auto;display:block;filter:drop-shadow(0 8px 14px rgba(0,0,0,.28))}
 .eyebrow,.badge-chip,.kpi-label,.sponsor-tier{
   display:inline-flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.16em;font-size:.72rem;font-weight:800;
 }
@@ -110,6 +110,21 @@ h1,h2,h3,h4{margin:0 0 .85rem;line-height:1.08;font-weight:800;letter-spacing:-0
 .kpi-label{color:rgba(255,255,255,.78);font-size:.68rem}
 
 .hero-panel{padding:18px;border-radius:28px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(14px);display:grid;gap:16px}
+.hero-carousel-head h2{margin:0;font-size:1.7rem}
+.home-showcase-carousel{display:grid;gap:14px}
+.showcase-track{position:relative;min-height:320px}
+.showcase-slide{display:none;padding:18px;border-radius:20px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14)}
+.showcase-slide.active{display:block}
+.showcase-slide h3{font-size:1.55rem}
+.showcase-list{list-style:none;padding:0;margin:10px 0 14px;display:grid;gap:10px}
+.showcase-list li{display:flex;justify-content:space-between;gap:10px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.2)}
+.showcase-list strong{font-size:.95rem}
+.showcase-list span{color:rgba(255,255,255,.78);font-weight:600;font-size:.82rem}
+.showcase-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:10px 0 14px}
+.showcase-gallery img{width:100%;aspect-ratio:1/1;border-radius:12px;object-fit:cover}
+.showcase-dots{display:flex;gap:8px}
+.showcase-dot{width:10px;height:10px;border-radius:999px;border:0;background:rgba(255,255,255,.35);cursor:pointer;padding:0}
+.showcase-dot.active{width:28px;background:#fff}
 .info-banner{padding:18px 18px 14px;border-radius:22px;background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.12)}
 .info-banner strong{display:block;color:#fff;margin-bottom:6px;font-size:1.05rem}
 .info-banner p:last-child{margin-bottom:0;color:rgba(255,255,255,.84)}
@@ -237,7 +252,7 @@ code{font-family:ui-monospace, SFMono-Regular, Menlo, monospace;font-size:.92em;
   .hero-grid,.split,.grid-4,.grid-3,.grid-2,.footer-grid{grid-template-columns:1fr}
   .hero-grid{padding:22px}
   .hero-title{max-width:none}
-  .hero-logo-row{padding:12px 14px}
+  .hero-logo-row{padding:10px 12px}
   .hero-logo-row img{height:48px}
   .section-panel{padding:20px}
   .brand{padding:0}

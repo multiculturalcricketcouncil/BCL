@@ -18,7 +18,7 @@ const BCL = {
     switch (page) {
       case "home":
         await Promise.all([
-          this.renderHomeMatches(),
+          this.renderHomeShowcase(),
           this.renderPointsTable("#home-points", 5),
           this.renderNewsCards("#home-news", 3),
           this.renderSponsors("#sponsors-grid"),
@@ -191,6 +191,104 @@ const BCL = {
         </div>
       </article>
     `).join("");
+  },
+
+  async renderHomeShowcase() {
+    const mount = document.querySelector("#home-showcase-carousel");
+    if (!mount) return;
+
+    const [pointsSeasons, teamsData, fixturesData, galleryData] = await Promise.all([
+      this.getPointsData().catch(() => []),
+      this.getTeams().catch(() => ({ teams: [] })),
+      this.getMatches().catch(() => ({ matches: [] })),
+      this.fetchJson("data/gallery.json").catch(() => ({ items: [] }))
+    ]);
+
+    const topPoints = pointsSeasons[0]?.table?.slice(0, 4) || [];
+    const topTeams = (teamsData.teams || []).slice(0, 4);
+    const upcomingMatches = (fixturesData.matches || []).slice(0, 3);
+    const galleryItems = (galleryData.items || []).slice(0, 4);
+
+    const slides = [
+      {
+        title: "Points table",
+        subtitle: "Current top teams",
+        cta: "points-table.html",
+        ctaText: "Open full table",
+        content: `
+          <ul class="showcase-list">
+            ${topPoints.map((row) => `<li><strong>#${row.position} ${row.team}</strong><span>${row.points} pts</span></li>`).join("")}
+          </ul>`
+      },
+      {
+        title: "Teams",
+        subtitle: "Competition franchises",
+        cta: "teams.html",
+        ctaText: "View all teams",
+        content: `
+          <ul class="showcase-list">
+            ${topTeams.map((team) => `<li><strong>${team.name}</strong><span>${team.city || "League team"}</span></li>`).join("")}
+          </ul>`
+      },
+      {
+        title: "Matches",
+        subtitle: "Upcoming fixtures",
+        cta: "fixtures-results.html",
+        ctaText: "Open fixtures",
+        content: `
+          <ul class="showcase-list">
+            ${upcomingMatches.map((match) => `<li><strong>${match.homeTeam} vs ${match.awayTeam}</strong><span>${this.formatDate(match.date)}</span></li>`).join("")}
+          </ul>`
+      },
+      {
+        title: "Gallery",
+        subtitle: "Latest visuals",
+        cta: "gallery.html",
+        ctaText: "Browse gallery",
+        content: `
+          <div class="showcase-gallery">
+            ${galleryItems.map((item) => `<img src="${item.src}" alt="${item.title || "Gallery image"}" loading="lazy" onerror="this.src='assets/images/gallery-placeholder.svg'" />`).join("")}
+          </div>`
+      }
+    ];
+
+    mount.innerHTML = `
+      <div class="showcase-track">
+        ${slides.map((slide, index) => `
+          <article class="showcase-slide ${index === 0 ? "active" : ""}" data-showcase-slide="${index}">
+            <p class="eyebrow">${slide.subtitle}</p>
+            <h3>${slide.title}</h3>
+            ${slide.content}
+            <a class="text-link" href="${slide.cta}">${slide.ctaText}</a>
+          </article>
+        `).join("")}
+      </div>
+      <div class="showcase-dots" role="tablist" aria-label="Homepage spotlight">
+        ${slides.map((slide, index) => `<button type="button" class="showcase-dot ${index === 0 ? "active" : ""}" data-showcase-dot="${index}" aria-label="${slide.title}" aria-selected="${index === 0 ? "true" : "false"}"></button>`).join("")}
+      </div>
+    `;
+
+    let currentIndex = 0;
+    const slideNodes = Array.from(mount.querySelectorAll("[data-showcase-slide]"));
+    const dotNodes = Array.from(mount.querySelectorAll("[data-showcase-dot]"));
+
+    const activate = (index) => {
+      currentIndex = index;
+      slideNodes.forEach((node, nodeIndex) => node.classList.toggle("active", nodeIndex === index));
+      dotNodes.forEach((dot, dotIndex) => {
+        const active = dotIndex === index;
+        dot.classList.toggle("active", active);
+        dot.setAttribute("aria-selected", String(active));
+      });
+    };
+
+    dotNodes.forEach((dot) => {
+      dot.addEventListener("click", () => activate(Number(dot.dataset.showcaseDot)));
+    });
+
+    window.setInterval(() => {
+      activate((currentIndex + 1) % slides.length);
+    }, 4200);
   },
 
   async renderFixtures() {
