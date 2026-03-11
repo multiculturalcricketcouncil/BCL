@@ -1,0 +1,65 @@
+{
+  "season": "2025",
+  "matches": [
+    {
+      "id": "bcl-001",
+      "stage": "Round 1",
+      "date": "2025-04-05",
+      "time": "09:30",
+      "venue": "Allan Border Field",
+      "homeTeam": "Brisbane Falcons",
+      "awayTeam": "Southside Strikers",
+      "homeScore": "178/6",
+      "awayScore": "171/8",
+      "status": "Result",
+      "result": "Brisbane Falcons won by 7 runs",
+      "streamUrl": "#",
+      "matchCentreUrl": "#"
+    },
+    {
+      "id": "bcl-002",
+      "stage": "Round 1",
+      "date": "2025-04-05",
+      "time": "13:30",
+      "venue": "Allan Border Field",
+      "homeTeam": "Western Warriors",
+      "awayTeam": "River City Royals",
+      "homeScore": "",
+      "awayScore": "",
+      "status": "Upcoming",
+      "result": "",
+      "streamUrl": "#",
+      "matchCentreUrl": "#"
+    },
+    {
+      "id": "bcl-003",
+      "stage": "Round 2",
+      "date": "2025-04-12",
+      "time": "10:00",
+      "venue": "Ian Healy Oval",
+      "homeTeam": "Northside Chargers",
+      "awayTeam": "Logan Lions",
+      "homeScore": "156/9",
+      "awayScore": "159/4",
+      "status": "Result",
+      "result": "Logan Lions won by 6 wickets",
+      "streamUrl": "#",
+      "matchCentreUrl": "#"
+    },
+    {
+      "id": "bcl-004",
+      "stage": "Round 2",
+      "date": "2025-04-12",
+      "time": "14:00",
+      "venue": "Ian Healy Oval",
+      "homeTeam": "Metro Kings",
+      "awayTeam": "Sunshine Coast United",
+      "homeScore": "",
+      "awayScore": "",
+      "status": "Upcoming",
+      "result": "",
+      "streamUrl": "#",
+      "matchCentreUrl": "#"
+    }
+  ]
+}

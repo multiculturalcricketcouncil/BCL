@@ -1,0 +1,72 @@
+{
+  "season": "2025",
+  "updated": "2025-04-12T16:00:00+10:00",
+  "table": [
+    {
+      "position": 1,
+      "team": "Brisbane Falcons",
+      "played": 3,
+      "won": 3,
+      "lost": 0,
+      "tied": 0,
+      "nr": 0,
+      "points": 6,
+      "nrr": "+1.238"
+    },
+    {
+      "position": 2,
+      "team": "Logan Lions",
+      "played": 3,
+      "won": 2,
+      "lost": 1,
+      "tied": 0,
+      "nr": 0,
+      "points": 4,
+      "nrr": "+0.772"
+    },
+    {
+      "position": 3,
+      "team": "Western Warriors",
+      "played": 3,
+      "won": 2,
+      "lost": 1,
+      "tied": 0,
+      "nr": 0,
+      "points": 4,
+      "nrr": "+0.241"
+    },
+    {
+      "position": 4,
+      "team": "Metro Kings",
+      "played": 3,
+      "won": 1,
+      "lost": 2,
+      "tied": 0,
+      "nr": 0,
+      "points": 2,
+      "nrr": "-0.114"
+    },
+    {
+      "position": 5,
+      "team": "Southside Strikers",
+      "played": 3,
+      "won": 1,
+      "lost": 2,
+      "tied": 0,
+      "nr": 0,
+      "points": 2,
+      "nrr": "-0.601"
+    },
+    {
+      "position": 6,
+      "team": "River City Royals",
+      "played": 3,
+      "won": 0,
+      "lost": 3,
+      "tied": 0,
+      "nr": 0,
+      "points": 0,
+      "nrr": "-1.536"
+    }
+  ]
+}

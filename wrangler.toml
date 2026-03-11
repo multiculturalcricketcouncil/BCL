@@ -1,0 +1,5 @@
+name = "bcl-website"
+compatibility_date = "2025-03-10"
+
+[vars]
+SITE_NAME = "Brisbane Champions League"

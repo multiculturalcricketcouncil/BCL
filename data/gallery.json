@@ -1,0 +1,14 @@
+{
+  "items": [
+    {
+      "src": "photos/gallery/hero-match.jpg",
+      "title": "Opening Round Atmosphere",
+      "caption": "Add your own gallery photos to /photos/gallery and regenerate the gallery index."
+    },
+    {
+      "src": "photos/gallery/team-huddle.jpg",
+      "title": "Team Huddle",
+      "caption": "Player, team and sponsor imagery can all be added here."
+    }
+  ]
+}

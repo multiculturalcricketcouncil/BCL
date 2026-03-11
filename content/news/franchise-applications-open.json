@@ -1,0 +1,28 @@
+{
+  "slug": "franchise-applications-open",
+  "title": "Franchise applications are now open for the next BCL intake",
+  "date": "2025-03-22",
+  "author": "League Office",
+  "coverImage": "photos/gallery/team-huddle.jpg",
+  "excerpt": "Interested teams can now submit expressions of interest to join the league ecosystem.",
+  "body": [
+    {
+      "type": "paragraph",
+      "text": "BCL is inviting ambitious cricket organisations to register their interest in joining a competition built on professionalism, visibility and community connection."
+    },
+    {
+      "type": "list",
+      "items": [
+        "Strong franchise identity",
+        "Management readiness",
+        "Squad quality",
+        "Commitment to league standards",
+        "Commercial and community alignment"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "Teams that meet the competition criteria will be invited to progress through the review process."
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "season": "2025",
+  "players": [
+    {
+      "number": 1,
+      "name": "Shijit Chandran",
+      "role": "Right arm off-spin all-rounder",
+      "isCaptain": true
+    },
+    {
+      "number": 2,
+      "name": "Akhil Manikandan",
+      "role": "Right arm bowling all-rounder"
+    },
+    {
+      "number": 3,
+      "name": "A. Dhaliwal (Mani)",
+      "role": "Right arm all-rounder"
+    },
+    {
+      "number": 4,
+      "name": "Vishwa Ramkumar",
+      "role": "Right arm leg-spinner"
+    },
+    {
+      "number": 5,
+      "name": "Sayed Rihan",
+      "role": "Left arm batting all-rounder"
+    },
+    {
+      "number": 6,
+      "name": "Ben Roggers",
+      "role": "Left arm batsman",
+      "isKeeper": true
+    },
+    {
+      "number": 7,
+      "name": "Jatinder Mann",
+      "role": "Right arm bowling all-rounder"
+    },
+    {
+      "number": 8,
+      "name": "Karthik Singh",
+      "role": "Left arm batsman"
+    },
+    {
+      "number": 9,
+      "name": "Shyam Varghes",
+      "role": "Right arm batsman",
+      "isKeeper": true
+    },
+    {
+      "number": 10,
+      "name": "Rubal Goraya",
+      "role": "Right arm off-spin all-rounder"
+    },
+    {
+      "number": 11,
+      "name": "Rohit Sailly",
+      "role": "Right arm leg-spin all-rounder"
+    },
+    {
+      "number": 12,
+      "name": "Sai Teja Reddy",
+      "role": "Right arm medium-fast bowler"
+    },
+    {
+      "number": 13,
+      "name": "Paramvir Singh",
+      "role": "Left arm bowler"
+    },
+    {
+      "number": 14,
+      "name": "Neeraj Rajagopal",
+      "role": "Right hand batsman"
+    },
+    {
+      "number": 15,
+      "name": "Conner Smith",
+      "role": "Left arm spinner"
+    },
+    {
+      "number": 16,
+      "name": "Hashan Wanasekara",
+      "role": "Left arm batsman, Right arm legspin"
+    }
+  ]
+}

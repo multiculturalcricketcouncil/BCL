@@ -1,0 +1,18 @@
+{
+  "siteName": "Brisbane Champions League",
+  "siteShortName": "BCL",
+  "season": "2025",
+  "tagline": "Australia's Premier Multicultural T20 Cricket League",
+  "description": "Official website for Brisbane Champions League, powered by AMCC.",
+  "contactEmail": "info@multiculturalcricket.com.au",
+  "contactWebsite": "https://www.multiculturalcricket.com.au",
+  "contactPhones": [
+    "+61 435 322 155",
+    "+61 433 158 125"
+  ],
+  "location": "Queensland, Australia",
+  "useLiveApi": false,
+  "apiEndpoint": "/api/matches",
+  "heroVideoUrl": "",
+  "sponsorsTitle": "Partners & Sponsors"
+}
