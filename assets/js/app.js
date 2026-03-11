@@ -1,6 +1,7 @@
-
 const BCL = {
   site: null,
+  galleryItems: [],
+  activeGalleryIndex: 0,
 
   async boot() {
     this.site = await this.fetchJson("data/site.json").catch(() => ({}));
@@ -8,6 +9,7 @@ const BCL = {
     this.injectFooter();
     this.setYear();
     this.bindMobileNav();
+    this.bindGalleryModalEvents();
     await this.routePage();
   },
 
@@ -92,7 +94,7 @@ const BCL = {
         <div class="container footer-grid">
           <div>
             <img class="footer-logo" src="assets/images/bcl-logo.png" alt="BCL logo" />
-            <p>Brisbane Champions League is a premium multicultural cricket property powered by AMCC, built for fixtures, results, news, sponsors and league storytelling.</p>
+            <p>Brisbane Champions League is a premium multicultural cricket property built for fixtures, results, news, sponsors and league storytelling.</p>
           </div>
           <div>
             <h4>Explore</h4>
@@ -112,7 +114,7 @@ const BCL = {
         </div>
         <div class="container footer-bottom">
           <span>© <span data-year></span> Brisbane Champions League</span>
-          <span>Optimised for Cloudflare Pages</span>
+          <span>Official competition platform</span>
         </div>
       </footer>`;
   },
@@ -155,7 +157,7 @@ const BCL = {
           return { matches: liveData.matches || liveData.items };
         }
       } catch (error) {
-        console.warn("Falling back to local fixtures.json", error);
+        console.warn("Using standard fixture data", error);
       }
     }
     return this.fetchJson("data/fixtures.json");
@@ -218,12 +220,16 @@ const BCL = {
     `).join("");
   },
 
-  async renderPointsTable(selector, limit = 999) {
-    const mount = document.querySelector(selector);
-    if (!mount) return;
+  async getPointsData() {
     const data = await this.fetchJson("data/points-table.json");
-    const rows = (data.table || []).slice(0, limit);
-    mount.innerHTML = `
+    const seasonGroups = Array.isArray(data.seasons)
+      ? data.seasons
+      : [{ season: data.season || this.site?.season || "Season", updated: data.updated, table: data.table || [] }];
+    return seasonGroups.filter((item) => Array.isArray(item.table));
+  },
+
+  renderPointsTableMarkup(rows, updated, includeNote = true) {
+    return `
       <div class="table-wrap">
         <table class="league-table">
           <thead>
@@ -246,8 +252,41 @@ const BCL = {
           </tbody>
         </table>
       </div>
-      <p class="table-note">Updated ${new Date(data.updated).toLocaleString("en-AU")}</p>
+      ${includeNote && updated ? `<p class="table-note">Updated ${new Date(updated).toLocaleString("en-AU")}</p>` : ""}
     `;
+  },
+
+  async renderPointsTable(selector, limit = 999) {
+    const mount = document.querySelector(selector);
+    if (!mount) return;
+    const seasons = await this.getPointsData();
+    if (!seasons.length) {
+      mount.innerHTML = "<p>No standings available.</p>";
+      return;
+    }
+
+    if (document.body.dataset.page === "points") {
+      const options = seasons.map((item, index) => `<option value="${index}">${item.season}</option>`).join("");
+      mount.innerHTML = `
+        <div class="points-filter-row">
+          <label for="season-select">Season</label>
+          <select id="season-select" class="season-select">${options}</select>
+        </div>
+        <div id="points-table-content"></div>
+      `;
+      const content = mount.querySelector("#points-table-content");
+      const select = mount.querySelector("#season-select");
+      const renderSeason = (index) => {
+        const selected = seasons[Number(index)] || seasons[0];
+        content.innerHTML = this.renderPointsTableMarkup((selected.table || []).slice(0, limit), selected.updated, true);
+      };
+      select?.addEventListener("change", (event) => renderSeason(event.target.value));
+      renderSeason(0);
+      return;
+    }
+
+    const current = seasons[0];
+    mount.innerHTML = this.renderPointsTableMarkup((current.table || []).slice(0, limit), current.updated, false);
   },
 
   async getTeams() {
@@ -256,8 +295,9 @@ const BCL = {
       this.fetchJson("data/points-table.json").catch(() => ({ table: [] })),
       this.fetchJson("data/fixtures.json").catch(() => ({ matches: [] }))
     ]);
+    const activeTable = Array.isArray(tableData.seasons) ? tableData.seasons[0]?.table || [] : tableData.table || [];
     const map = new Map();
-    (tableData.table || []).forEach((row) => {
+    activeTable.forEach((row) => {
       map.set(row.team, {
         name: row.team,
         slug: this.slugify(row.team),
@@ -306,7 +346,7 @@ const BCL = {
               <span class="team-rank">${standing}</span>
             </div>
             <h3>${team.name}</h3>
-            <p>${team.summary || "Official team card. Update data/teams.json for richer club information and upload a team logo to photos/teams/."}</p>
+            <p>${team.summary || "Official team profile with match context, form and venue details."}</p>
             <dl class="team-meta">
               <div><dt>Record</dt><dd>${record}</dd></div>
               <div><dt>Points</dt><dd>${team.points ?? "—"}</dd></div>
@@ -354,7 +394,7 @@ const BCL = {
     if (!mount) return;
     const slug = new URLSearchParams(window.location.search).get("slug");
     if (!slug) {
-      mount.innerHTML = `<p>News item not found.</p>`;
+      mount.innerHTML = "<p>News item not found.</p>";
       return;
     }
     try {
@@ -366,7 +406,7 @@ const BCL = {
         <div class="rich-text">${this.renderBlocks(item.body || [])}</div>
       `;
     } catch (error) {
-      mount.innerHTML = `<p>Unable to load this news item.</p>`;
+      mount.innerHTML = "<p>Unable to load this news item.</p>";
     }
   },
 
@@ -378,13 +418,97 @@ const BCL = {
     }).join("");
   },
 
+  buildGalleryModal() {
+    if (document.querySelector(".gallery-modal")) return;
+    document.body.insertAdjacentHTML("beforeend", `
+      <div class="gallery-modal" aria-hidden="true" role="dialog" aria-label="Gallery carousel">
+        <button class="gallery-modal-close" type="button" aria-label="Close image viewer">×</button>
+        <button class="gallery-nav prev" type="button" aria-label="Previous image">‹</button>
+        <div class="gallery-modal-content">
+          <img class="gallery-modal-image" src="" alt="Gallery image" />
+          <div class="gallery-modal-caption"></div>
+        </div>
+        <button class="gallery-nav next" type="button" aria-label="Next image">›</button>
+      </div>
+    `);
+  },
+
+  bindGalleryModalEvents() {
+    document.addEventListener("click", (event) => {
+      const trigger = event.target.closest("[data-gallery-index]");
+      if (trigger) {
+        this.openGalleryModal(Number(trigger.dataset.galleryIndex));
+        return;
+      }
+
+      const modal = event.target.closest(".gallery-modal");
+      if (event.target.closest(".gallery-modal-close")) {
+        this.closeGalleryModal();
+      } else if (event.target.closest(".gallery-nav.prev")) {
+        this.shiftGallery(-1);
+      } else if (event.target.closest(".gallery-nav.next")) {
+        this.shiftGallery(1);
+      } else if (modal && event.target.classList.contains("gallery-modal")) {
+        this.closeGalleryModal();
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      const modal = document.querySelector(".gallery-modal.active");
+      if (!modal) return;
+      if (event.key === "Escape") this.closeGalleryModal();
+      if (event.key === "ArrowLeft") this.shiftGallery(-1);
+      if (event.key === "ArrowRight") this.shiftGallery(1);
+    });
+  },
+
+  updateGalleryModal() {
+    const modal = document.querySelector(".gallery-modal");
+    if (!modal || !this.galleryItems.length) return;
+    const item = this.galleryItems[this.activeGalleryIndex];
+    const image = modal.querySelector(".gallery-modal-image");
+    const caption = modal.querySelector(".gallery-modal-caption");
+    image.src = item?.src || "assets/images/gallery-placeholder.svg";
+    image.alt = item?.title || "Gallery image";
+    image.onerror = () => { image.src = "assets/images/gallery-placeholder.svg"; };
+    caption.innerHTML = `<strong>${item?.title || ""}</strong><span>${item?.caption || ""}</span>`;
+  },
+
+  openGalleryModal(index = 0) {
+    this.buildGalleryModal();
+    const modal = document.querySelector(".gallery-modal");
+    if (!modal || !this.galleryItems.length) return;
+    this.activeGalleryIndex = Math.max(0, Math.min(index, this.galleryItems.length - 1));
+    this.updateGalleryModal();
+    modal.classList.add("active");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+  },
+
+  closeGalleryModal() {
+    const modal = document.querySelector(".gallery-modal");
+    if (!modal) return;
+    modal.classList.remove("active");
+    modal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("modal-open");
+  },
+
+  shiftGallery(step) {
+    if (!this.galleryItems.length) return;
+    this.activeGalleryIndex = (this.activeGalleryIndex + step + this.galleryItems.length) % this.galleryItems.length;
+    this.updateGalleryModal();
+  },
+
   async renderGallery(selector, limit = 999) {
     const mount = document.querySelector(selector);
     if (!mount) return;
     const data = await this.fetchJson("data/gallery.json");
-    mount.innerHTML = (data.items || []).slice(0, limit).map((item) => `
+    this.galleryItems = data.items || [];
+    mount.innerHTML = this.galleryItems.slice(0, limit).map((item, index) => `
       <figure class="gallery-card">
-        <img src="${item.src}" alt="${item.title || 'Gallery image'}" loading="lazy" onerror="this.src='assets/images/gallery-placeholder.svg'" />
+        <button class="gallery-open" data-gallery-index="${index}" type="button" aria-label="Open ${item.title || 'gallery image'}">
+          <img src="${item.src}" alt="${item.title || 'Gallery image'}" loading="lazy" onerror="this.src='assets/images/gallery-placeholder.svg'" />
+        </button>
         <figcaption>
           <strong>${item.title || ""}</strong>
           <span>${item.caption || ""}</span>
@@ -422,4 +546,5 @@ const BCL = {
     return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
   }
 };
+
 window.addEventListener("DOMContentLoaded", () => BCL.boot());
