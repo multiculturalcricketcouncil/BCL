@@ -93,6 +93,16 @@ h1,h2,h3,h4{margin:0 0 .85rem;line-height:1.08;font-weight:800;letter-spacing:-0
 }
 .eyebrow{color:#fed7aa;margin-bottom:.65rem}
 .hero-title{font-size:clamp(3rem, 6vw, 5rem);max-width:11ch;margin-bottom:1rem}
+.home-hero-carousel{margin:18px 0 16px;display:grid;gap:10px}
+.hero-carousel-track{position:relative;min-height:260px}
+.hero-carousel-slide{display:none;margin:0;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.24);box-shadow:0 18px 34px rgba(15,23,42,.34)}
+.hero-carousel-slide.active{display:block}
+.hero-carousel-slide img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
+.hero-carousel-dots{display:flex;gap:8px}
+.hero-carousel-dot{width:10px;height:10px;border-radius:999px;border:0;padding:0;background:rgba(255,255,255,.4);cursor:pointer}
+.hero-carousel-dot.active{width:28px;background:#fff}
+.hero-carousel-empty{padding:14px 16px;border-radius:16px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:rgba(255,255,255,.9);font-size:.95rem}
+.hero-carousel-empty code{padding:.2rem .38rem;background:rgba(15,23,42,.35);border-radius:8px;color:#fff}
 .hero-subtitle{max-width:62ch;font-size:1.04rem;color:rgba(255,255,255,0.86)}
 .button-row,.match-actions,.hero-kpis{display:flex;flex-wrap:wrap;gap:12px}
 .button{

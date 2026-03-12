@@ -18,6 +18,7 @@ const BCL = {
     switch (page) {
       case "home":
         await Promise.all([
+          this.renderHomeHeroCarousel(),
           this.renderHomeShowcase(),
           this.renderPointsTable("#home-points", 5),
           this.renderNewsCards("#home-news", 3),
@@ -193,6 +194,77 @@ const BCL = {
     `).join("");
   },
 
+
+  async renderHomeHeroCarousel() {
+    const mount = document.querySelector("#home-hero-carousel");
+    if (!mount) return;
+
+    const files = [
+      "photos/homepage/1.jpg",
+      "photos/homepage/2.jpg",
+      "photos/homepage/3.jpg",
+      "photos/homepage/4.jpg",
+      "photos/homepage/5.jpg",
+      "photos/homepage/1.png",
+      "photos/homepage/2.png",
+      "photos/homepage/3.png",
+      "photos/homepage/4.png",
+      "photos/homepage/5.png",
+      "photos/homepage/1.webp",
+      "photos/homepage/2.webp",
+      "photos/homepage/3.webp",
+      "photos/homepage/4.webp",
+      "photos/homepage/5.webp"
+    ];
+
+    const existing = await Promise.all(files.map((src) => new Promise((resolve) => {
+      const image = new Image();
+      image.onload = () => resolve(src);
+      image.onerror = () => resolve(null);
+      image.src = src;
+    })));
+
+    const slides = existing.filter(Boolean).slice(0, 6);
+    if (!slides.length) {
+      mount.innerHTML = '<p class="hero-carousel-empty">Upload images to <code>photos/homepage</code> using names like <strong>1.jpg</strong>, <strong>2.jpg</strong>, etc.</p>';
+      return;
+    }
+
+    mount.innerHTML = `
+      <div class="hero-carousel-track">
+        ${slides.map((src, index) => `
+          <figure class="hero-carousel-slide ${index === 0 ? "active" : ""}" data-hero-slide="${index}">
+            <img src="${src}" alt="BCL home banner ${index + 1}" loading="${index === 0 ? "eager" : "lazy"}" />
+          </figure>
+        `).join("")}
+      </div>
+      <div class="hero-carousel-dots" role="tablist" aria-label="Homepage banners">
+        ${slides.map((_, index) => `<button type="button" class="hero-carousel-dot ${index === 0 ? "active" : ""}" data-hero-dot="${index}" aria-label="Slide ${index + 1}" aria-selected="${index === 0 ? "true" : "false"}"></button>`).join("")}
+      </div>
+    `;
+
+    let currentIndex = 0;
+    const slideNodes = Array.from(mount.querySelectorAll("[data-hero-slide]"));
+    const dotNodes = Array.from(mount.querySelectorAll("[data-hero-dot]"));
+
+    const activate = (index) => {
+      currentIndex = index;
+      slideNodes.forEach((node, nodeIndex) => node.classList.toggle("active", nodeIndex === index));
+      dotNodes.forEach((dot, dotIndex) => {
+        const active = dotIndex === index;
+        dot.classList.toggle("active", active);
+        dot.setAttribute("aria-selected", String(active));
+      });
+    };
+
+    dotNodes.forEach((dot) => {
+      dot.addEventListener("click", () => activate(Number(dot.dataset.heroDot)));
+    });
+
+    window.setInterval(() => {
+      activate((currentIndex + 1) % slides.length);
+    }, 3800);
+  },
   async renderHomeShowcase() {
     const mount = document.querySelector("#home-showcase-carousel");
     if (!mount) return;
