@@ -1,9 +1,14 @@
-# Homepage carousel images
+# Homepage media
 
-Upload homepage carousel images to this folder using numbered filenames so they are detected automatically:
+Upload any homepage media to this folder:
 
-- `1.jpg`, `2.jpg`, `3.jpg` ... (or)
-- `1.png`, `2.png`, `3.png` ... (or)
-- `1.webp`, `2.webp`, `3.webp` ...
+- Images: `.jpg`, `.jpeg`, `.png`, `.webp`, `.avif`, `.gif`
+- Videos: `.mp4`, `.webm`, `.mov`, `.m4v`
 
-The homepage will automatically rotate through the first available images it finds (up to 6 images).
+Then run:
+
+```bash
+npm run build:media
+```
+
+The homepage carousel will load all files listed in `data/media-index.json`.

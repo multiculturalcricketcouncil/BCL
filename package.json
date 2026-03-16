@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "wrangler pages dev .",
     "build:news": "node scripts/generate-news-index.mjs",
-    "build:gallery": "node scripts/generate-gallery-index.mjs"
+    "build:gallery": "node scripts/generate-media-index.mjs",
+    "build:media": "node scripts/generate-media-index.mjs"
   },
   "devDependencies": {
     "wrangler": "^3.99.0"

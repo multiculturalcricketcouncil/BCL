@@ -199,42 +199,24 @@ const BCL = {
     const mount = document.querySelector("#home-hero-carousel");
     if (!mount) return;
 
-    const files = [
-      "photos/homepage/1.jpg",
-      "photos/homepage/2.jpg",
-      "photos/homepage/3.jpg",
-      "photos/homepage/4.jpg",
-      "photos/homepage/5.jpg",
-      "photos/homepage/1.png",
-      "photos/homepage/2.png",
-      "photos/homepage/3.png",
-      "photos/homepage/4.png",
-      "photos/homepage/5.png",
-      "photos/homepage/1.webp",
-      "photos/homepage/2.webp",
-      "photos/homepage/3.webp",
-      "photos/homepage/4.webp",
-      "photos/homepage/5.webp"
-    ];
+    const media = await this.fetchJson("data/media-index.json").catch(() => ({ homepage: { images: [], videos: [] } }));
+    const home = media.homepage || {};
+    const imageSlides = Array.isArray(home.images) ? home.images.map((src) => ({ type: "image", src })) : [];
+    const videoSlides = Array.isArray(home.videos) ? home.videos.map((src) => ({ type: "video", src })) : [];
+    const slides = [...videoSlides, ...imageSlides].slice(0, 8);
 
-    const existing = await Promise.all(files.map((src) => new Promise((resolve) => {
-      const image = new Image();
-      image.onload = () => resolve(src);
-      image.onerror = () => resolve(null);
-      image.src = src;
-    })));
-
-    const slides = existing.filter(Boolean).slice(0, 6);
     if (!slides.length) {
-      mount.innerHTML = '<p class="hero-carousel-empty">Upload images to <code>photos/homepage</code> using names like <strong>1.jpg</strong>, <strong>2.jpg</strong>, etc.</p>';
+      mount.innerHTML = '<p class="hero-carousel-empty">Upload images/videos to <code>photos/homepage</code> and run <code>npm run build:media</code>.</p>';
       return;
     }
 
     mount.innerHTML = `
       <div class="hero-carousel-track">
-        ${slides.map((src, index) => `
+        ${slides.map((slide, index) => `
           <figure class="hero-carousel-slide ${index === 0 ? "active" : ""}" data-hero-slide="${index}">
-            <img src="${src}" alt="BCL home banner ${index + 1}" loading="${index === 0 ? "eager" : "lazy"}" />
+            ${slide.type === "video"
+              ? `<video src="${slide.src}" controls playsinline preload="metadata"></video>`
+              : `<img src="${slide.src}" alt="BCL home banner ${index + 1}" loading="${index === 0 ? "eager" : "lazy"}" />`}
           </figure>
         `).join("")}
       </div>
@@ -277,6 +259,7 @@ const BCL = {
     ]);
 
     const topPoints = pointsSeasons[0]?.table?.slice(0, 4) || [];
+    const topGroupTeams = pointsSeasons[0]?.groups?.flatMap((group) => group.teams || []).slice(0, 4) || [];
     const topTeams = (teamsData.teams || []).slice(0, 4);
     const upcomingMatches = (fixturesData.matches || []).slice(0, 3);
     const galleryItems = (galleryData.items || []).slice(0, 4);
@@ -290,6 +273,7 @@ const BCL = {
         content: `
           <ul class="showcase-list">
             ${topPoints.map((row) => `<li><strong>#${row.position} ${row.team}</strong><span>${row.points} pts</span></li>`).join("")}
+            ${!topPoints.length ? topGroupTeams.map((team) => `<li><strong>${team}</strong><span>Group stage</span></li>`).join("") : ""}
           </ul>`
       },
       {
@@ -392,10 +376,36 @@ const BCL = {
 
   async getPointsData() {
     const data = await this.fetchJson("data/points-table.json");
+    if (Array.isArray(data.groups)) {
+      return [{ season: data.season || this.site?.season || "Season", updated: data.updated, groups: data.groups, table: [] }];
+    }
     const seasonGroups = Array.isArray(data.seasons)
       ? data.seasons
       : [{ season: data.season || this.site?.season || "Season", updated: data.updated, table: data.table || [] }];
     return seasonGroups.filter((item) => Array.isArray(item.table));
+  },
+
+  renderGroupTableMarkup(groups = [], updated, includeNote = true) {
+    const maxRows = Math.max(...groups.map((group) => (group.teams || []).length), 0);
+    return `
+      <div class="table-wrap">
+        <table class="league-table">
+          <thead>
+            <tr>
+              ${groups.map((group) => `<th>${group.name}</th>`).join("")}
+            </tr>
+          </thead>
+          <tbody>
+            ${Array.from({ length: maxRows }).map((_, index) => `
+              <tr>
+                ${groups.map((group) => `<td>${group.teams?.[index] || ""}</td>`).join("")}
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      </div>
+      ${includeNote && updated ? `<p class="table-note">Updated ${new Date(updated).toLocaleString("en-AU")}</p>` : ""}
+    `;
   },
 
   renderPointsTableMarkup(rows, updated, includeNote = true) {
@@ -432,6 +442,12 @@ const BCL = {
     const seasons = await this.getPointsData();
     if (!seasons.length) {
       mount.innerHTML = "<p>No standings available.</p>";
+      return;
+    }
+
+    const hasGroupTable = seasons[0]?.groups?.length;
+    if (hasGroupTable) {
+      mount.innerHTML = this.renderGroupTableMarkup(seasons[0].groups, seasons[0].updated, document.body.dataset.page === "points");
       return;
     }
 
