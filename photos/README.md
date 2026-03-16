@@ -1,16 +1,15 @@
 # Photos folder
 
 - Put gallery images in `photos/gallery/`
-- Put player images in `photos/players/2025/`
-- Name player images using the shirt number, for example:
-  - `1.jpg`
-  - `6.png`
-  - `16.webp`
+- Put homepage images/videos in `photos/homepage/`
+- Put team logos in `photos/teams/`
 
 Then run:
 
 ```bash
-node scripts/generate-gallery-index.mjs
+npm run build:media
 ```
 
-and commit the updated `data/gallery.json`.
+This regenerates:
+- `data/gallery.json` from all files in `photos/gallery/`
+- `data/media-index.json` from files in `photos/homepage/` and `photos/gallery/`
