@@ -1,214 +1,131 @@
-# Brisbane Champions League website
+# Brisbane Champions League Website
 
-Production-ready static sports website for **Brisbane Champions League (BCL)** with an **AMCC section**, responsive layout, Cloudflare Pages support, JSON-driven content, folder-based news workflow, gallery loader, and a Cloudflare Function adapter for live cricket API connections.
+This site is built in the **Wide Banner + Tiles First** design.
 
-## What is included
+## Main content locations
 
-- Match centre-style homepage cards
-- Fixtures + Results page
-- Points table page
-- Team page with league team cards
-- Gallery page
-- News listing + news detail pages
-- AMCC section
-- Sponsor section
-- Cloudflare Pages Function for live cricket API proxying
-- Folder conventions for gallery photos, team logos and news files
+### 1) Teams and groups
+Edit `data/teams.json`.
+- `groups` controls the Group A / Group B headings.
+- `teams` controls every team card.
+- Update `name`, `group`, `city`, `homeGround`, `summary`, `primaryColor`, and `secondaryColor`.
+- If you add a team logo, place it in `photos/teams/` using the team slug, for example `photos/teams/neapoleans.png`.
 
-## Folder structure
-
-```text
-assets/
-  css/
-  js/
-  images/
-content/
-  news/
-data/
-  teams.json
-functions/
-  api/
-photos/
-  gallery/
-  teams/
-scripts/
-```
-
-## Quick start locally
-
-1. Install Node.js 20+
-2. In this folder run:
-   ```bash
-   npm install
-   npm run build:news
-   npm run build:gallery
-   npm run dev
-   ```
-3. Open the local URL printed by Wrangler
-
-## How content works
-
-### 1) League team cards
-Edit:
-
-```text
-data/teams.json
-```
-
-Team logos go in:
-
-```text
-photos/teams/
-```
-
-Use the team slug as the filename, for example:
-
-```text
-brisbane-falcons.png
-logan-lions.png
-river-city-royals.webp
-```
-
-If no logo is uploaded, the UI shows an initials badge automatically.
-
-### 2) Points table
-Edit:
-
-```text
-data/points-table.json
-```
+### 2) Points table / standings
+Edit `data/points-table.json`.
+- Each season lives inside `seasons`.
+- Each season can have multiple `groups`.
+- Update `position`, `played`, `won`, `lost`, `nr`, `points`, and `nrr`.
+- The home page preview and the full points-table page both read from this file.
 
 ### 3) Fixtures and results
-Edit:
+Edit `data/fixtures.json`.
+- Add seasons under `seasons`.
+- Each season contains `matches`.
+- If a season has an empty `matches` array, the fixtures page will show **No matches scheduled**.
+- The fixtures page automatically shows a season dropdown.
 
-```text
-data/fixtures.json
-```
+Suggested match fields:
+- `date`
+- `time`
+- `stage`
+- `venue`
+- `homeTeam`
+- `awayTeam`
+- `homeScore`
+- `awayScore`
+- `status`
+- `result`
+- `streamUrl`
+- `matchCentreUrl`
 
-When your live integration is ready, update:
+### 4) Homepage wide banner image
+The main banner image is controlled from `data/site.json` under `homeImages.wideBanner`.
 
-```text
-data/site.json
-```
+You can point it to:
+- a remote URL, or
+- a local image inside the project
 
-Set:
+The banner is styled with a locked aspect ratio so it stays balanced on large screens and mobile screens.
 
-```json
-{
-  "useLiveApi": true,
-  "apiEndpoint": "/api/matches"
-}
-```
+### 5) Homepage tile images
+The Teams / Fixtures / Points Table tile images are controlled from `data/site.json` under `homeImages`:
+- `teamsTile`
+- `fixturesTile`
+- `pointsTile`
 
-### 4) News CMS folder system
-Create one JSON file per article inside:
+You can point each one to a local file inside `assets/images/` or to an external image URL.
 
-```text
-content/news/
-```
+### 6) BCL and AMCC logos
+Current logo files:
+- `assets/images/bcl-logo-white.png`
+- `assets/images/amcc-logo-white.png`
 
-Then run:
+These versions are used in the header / footer for better visibility in the dark layout.
+If you want to replace them, use similar proportions so the header layout stays balanced.
 
-```bash
-npm run build:news
-```
+### 7) Gallery images
+Gallery configuration lives in `data/gallery.json`.
+By default it points to a folder.
 
-This updates:
-
-```text
-content/news/index.json
-```
-
-### 5) Gallery auto-loader
-Upload images into:
-
-```text
-photos/gallery/
-```
-
-Then run:
+To use folder-based gallery loading:
+1. Put images in the configured folder, usually `photos/gallery/`
+2. Run the gallery index script:
 
 ```bash
 npm run build:gallery
 ```
 
-This updates:
+That generates / updates `photos/gallery/index.json`.
 
-```text
-data/gallery.json
+### 8) News stories
+News lives in `content/news/`.
+- `content/news/index.json` controls story order.
+- Individual stories are stored as separate JSON files.
+
+To rebuild the news index:
+
+```bash
+npm run build:news
 ```
 
-## Cricket.com.au / API adapter setup
+### 9) Sponsors
+Edit `data/sponsors.json`.
+Each sponsor supports:
+- `name`
+- `tier`
+- `logo`
+- `url`
 
-The site includes:
+## Design notes
+- The site uses the **Option 4** layout everywhere.
+- The layout is wider on large screens.
+- The mobile layout has dedicated responsive rules for the header, hero, tiles, tables, cards, and footer.
+- The stylesheet is fully replaced so older visual styles are not reused.
 
-```text
-functions/api/matches.js
+## Local preview
+If you want to preview locally, open the site with a local web server.
+For example:
+
+```bash
+python -m http.server
 ```
 
-This is a Cloudflare Pages Function that safely proxies requests to your upstream cricket feed so your credentials do not sit in browser JavaScript.
+Then open the site in your browser.
 
-### Environment variables to set in Cloudflare
 
-Create these in **Cloudflare Pages → Settings → Environment variables**:
+## Homepage media and social buttons
 
-- `CRICKET_API_BASE`
-- `CRICKET_API_KEY`
-- `CRICKET_API_BEARER`
-- `CRICKET_API_TENANT`
+The homepage wide banner and tile images are controlled from `data/site.json` under `homeImages`.
 
-Use whichever ones your provider requires. The function already supports these header patterns:
+- `wideBanner`: main wide banner image URL
+- `teamsTile`: Teams block image
+- `fixturesTile`: Fixtures block image
+- `pointsTile`: Points Table block image
 
-- `x-api-key`
-- `Authorization: Bearer ...`
-- `x-tenant-id`
+The Facebook and WhatsApp buttons in the homepage banner are also controlled from `data/site.json` under `socialLinks` and `socialText`.
 
-If cricket.com.au gives you different requirements, change the headers in:
-
-```text
-functions/api/matches.js
-```
-
-## Step-by-step: host on Cloudflare Pages free using GitHub
-
-### A. Create the GitHub repo
-1. Create a new GitHub repository, for example `bcl-website`
-2. Upload all files from this project into that repository
-3. Commit and push
-
-### B. Create the Cloudflare Pages project
-1. Log in to Cloudflare
-2. Open **Workers & Pages**
-3. Click **Create application**
-4. Choose **Pages**
-5. Choose **Connect to Git**
-6. Select your GitHub repository
-7. For build settings use:
-   - **Framework preset:** None
-   - **Build command:** leave blank for static-only deploys, or use `npm run build:news && npm run build:gallery` if you want Cloudflare to rebuild indices on each deploy
-   - **Build output directory:** `/`
-8. Click **Save and Deploy**
-
-### C. Add environment variables for live matches
-1. Open your Pages project
-2. Go to **Settings → Environment variables**
-3. Add your cricket API credentials
-4. Redeploy the project
-
-### D. Turn on live API in the website
-Edit `data/site.json` and set:
-
-```json
-{
-  "useLiveApi": true,
-  "apiEndpoint": "/api/matches"
-}
-```
-
-Commit and push again.
-
-### E. Optional custom domain
-1. In Cloudflare Pages open **Custom domains**
-2. Add your domain
-3. Follow the DNS prompts
-4. Cloudflare will provision SSL automatically
+- `socialLinks.facebook`: Facebook page URL
+- `socialLinks.whatsapp`: WhatsApp URL (for example a `wa.me` link)
+- `socialText.facebook`: label text for the Facebook button
+- `socialText.whatsapp`: label text for the WhatsApp button

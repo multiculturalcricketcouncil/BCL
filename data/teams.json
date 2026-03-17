@@ -1,59 +1,113 @@
 {
-  "season": "2025",
+  "season": "2025-26",
+  "groups": [
+    {
+      "name": "Group A"
+    },
+    {
+      "name": "Group B"
+    }
+  ],
   "teams": [
     {
-      "name": "Brisbane Falcons",
-      "slug": "brisbane-falcons",
-      "city": "Brisbane",
-      "homeGround": "Allan Border Field",
-      "summary": "League team profile. Add club logo to photos/teams/brisbane-falcons.png and extend this card from data/teams.json.",
-      "primaryColor": "#1F3A8A",
-      "secondaryColor": "#2563EB"
-    },
-    {
-      "name": "Logan Lions",
-      "slug": "logan-lions",
-      "city": "Logan",
-      "homeGround": "Ian Healy Oval",
-      "summary": "League team profile. Update team metadata, logo and squad details from the data folder whenever ready.",
-      "primaryColor": "#0F172A",
-      "secondaryColor": "#DC2626"
-    },
-    {
-      "name": "Western Warriors",
-      "slug": "western-warriors",
-      "city": "Western Brisbane",
-      "homeGround": "Allan Border Field",
-      "summary": "League team profile. Use this page for franchise branding, coach info and upcoming fixtures.",
-      "primaryColor": "#1F3A8A",
-      "secondaryColor": "#F59E0B"
-    },
-    {
-      "name": "Metro Kings",
-      "slug": "metro-kings",
-      "city": "Metro Region",
-      "homeGround": "Ian Healy Oval",
-      "summary": "League team profile. You can add a dedicated logo and richer metadata without changing the layout.",
-      "primaryColor": "#2563EB",
-      "secondaryColor": "#DC2626"
-    },
-    {
-      "name": "Southside Strikers",
-      "slug": "southside-strikers",
-      "city": "Southside",
-      "homeGround": "Allan Border Field",
-      "summary": "League team profile. Team logo files can be uploaded to photos/teams using the same slug.",
-      "primaryColor": "#1F3A8A",
-      "secondaryColor": "#F59E0B"
-    },
-    {
-      "name": "River City Royals",
-      "slug": "river-city-royals",
-      "city": "Brisbane",
+      "name": "Neapoleans",
+      "slug": "neapoleans",
+      "group": "Group A",
+      "city": "League Franchise",
       "homeGround": "TBC",
-      "summary": "League team profile. This card is driven from JSON so you can expand it with no code changes.",
+      "summary": "Official team profile for Group A. Update the club story, logo and venue details from data/teams.json whenever ready.",
+      "primaryColor": "#7C3AED",
+      "secondaryColor": "#2563EB"
+    },
+    {
+      "name": "Iconic Super Knights",
+      "slug": "iconic-super-knights",
+      "group": "Group A",
+      "city": "League Franchise",
+      "homeGround": "TBC",
+      "summary": "Official team profile for Group A. Add the team logo to photos/teams/iconic-super-knights.png to brand this card.",
+      "primaryColor": "#1F3A8A",
+      "secondaryColor": "#F59E0B"
+    },
+    {
+      "name": "Melbourne Tuskers",
+      "slug": "melbourne-tuskers",
+      "group": "Group A",
+      "city": "Melbourne",
+      "homeGround": "TBC",
+      "summary": "Official team profile for Group A. Team colours, venue and summary can be edited directly in data/teams.json.",
       "primaryColor": "#0F172A",
       "secondaryColor": "#2563EB"
+    },
+    {
+      "name": "QC Multicultural XI",
+      "slug": "qc-multicultural-xi",
+      "group": "Group A",
+      "city": "League Franchise",
+      "homeGround": "TBC",
+      "summary": "Official team profile for Group A. Use this card for franchise branding, leadership details and club identity.",
+      "primaryColor": "#2563EB",
+      "secondaryColor": "#14B8A6"
+    },
+    {
+      "name": "Perth United Warriors",
+      "slug": "perth-united-warriors",
+      "group": "Group A",
+      "city": "Perth",
+      "homeGround": "TBC",
+      "summary": "Official team profile for Group A. Upload a logo using the same slug in photos/teams to complete the card.",
+      "primaryColor": "#1F3A8A",
+      "secondaryColor": "#DC2626"
+    },
+    {
+      "name": "Melbourne Pirates",
+      "slug": "melbourne-pirates",
+      "group": "Group B",
+      "city": "Melbourne",
+      "homeGround": "TBC",
+      "summary": "Official team profile for Group B. Update any club details here and the website will reflect them automatically.",
+      "primaryColor": "#0F172A",
+      "secondaryColor": "#F59E0B"
+    },
+    {
+      "name": "Everest Falcons",
+      "slug": "everest-falcons",
+      "group": "Group B",
+      "city": "League Franchise",
+      "homeGround": "TBC",
+      "summary": "Official team profile for Group B. Add logos, franchise notes and venue info from data/teams.json.",
+      "primaryColor": "#1E3A8A",
+      "secondaryColor": "#38BDF8"
+    },
+    {
+      "name": "Sydney Kangaroos",
+      "slug": "sydney-kangaroos",
+      "group": "Group B",
+      "city": "Sydney",
+      "homeGround": "TBC",
+      "summary": "Official team profile for Group B. This card is JSON-driven, so name, group and colours can all be changed easily.",
+      "primaryColor": "#DC2626",
+      "secondaryColor": "#F59E0B"
+    },
+    {
+      "name": "Genid Royals",
+      "slug": "genid-royals",
+      "group": "Group B",
+      "city": "League Franchise",
+      "homeGround": "TBC",
+      "summary": "Official team profile for Group B. Upload a matching logo file to photos/teams to brand the card.",
+      "primaryColor": "#1F3A8A",
+      "secondaryColor": "#8B5CF6"
+    },
+    {
+      "name": "New York Liberty XI",
+      "slug": "new-york-liberty-xi",
+      "group": "Group B",
+      "city": "New York",
+      "homeGround": "TBC",
+      "summary": "Official team profile for Group B. Edit the club metadata in data/teams.json any time without changing the layout.",
+      "primaryColor": "#2563EB",
+      "secondaryColor": "#0F172A"
     }
   ]
 }

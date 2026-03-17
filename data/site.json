@@ -1,9 +1,9 @@
 {
   "siteName": "Brisbane Champions League",
   "siteShortName": "BCL",
-  "season": "2025",
+  "season": "2025-26",
   "tagline": "Australia's Premier Multicultural T20 Cricket League",
-  "description": "Official website for Brisbane Champions League, powered by AMCC.",
+  "description": "Official Brisbane Champions League website in the Wide Banner + Tiles First design.",
   "contactEmail": "info@multiculturalcricket.com.au",
   "contactWebsite": "https://www.multiculturalcricket.com.au",
   "contactPhones": [
@@ -14,5 +14,19 @@
   "useLiveApi": false,
   "apiEndpoint": "/api/matches",
   "heroVideoUrl": "",
-  "sponsorsTitle": "Partners & Sponsors"
+  "sponsorsTitle": "Partners & Sponsors",
+  "homeImages": {
+    "wideBanner": "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?auto=format&fit=crop&w=1800&q=80",
+    "teamsTile": "assets/images/home-tile-teams.jpg",
+    "fixturesTile": "assets/images/home-tile-fixtures.jpg",
+    "pointsTile": "assets/images/home-tile-points.jpg"
+  },
+  "socialLinks": {
+    "facebook": "https://www.facebook.com/p/Brisbane-Champions-League-61579869724220/",
+    "whatsapp": "https://wa.me/61435322155"
+  },
+  "socialText": {
+    "facebook": "Facebook",
+    "whatsapp": "WhatsApp"
+  }
 }

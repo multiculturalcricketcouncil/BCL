@@ -11,6 +11,7 @@ const BCL = {
     this.bindMobileNav();
     this.bindGalleryModalEvents();
     await this.routePage();
+    this.applySiteMedia();
   },
 
   async routePage() {
@@ -18,8 +19,6 @@ const BCL = {
     switch (page) {
       case "home":
         await Promise.all([
-          this.renderHomeHeroCarousel(),
-          this.renderHomeShowcase(),
           this.renderPointsTable("#home-points", 5),
           this.renderNewsCards("#home-news", 3),
           this.renderSponsors("#sponsors-grid"),
@@ -70,10 +69,12 @@ const BCL = {
       <header class="site-header">
         <div class="container header-inner">
           <a class="brand" href="index.html" aria-label="Brisbane Champions League home">
-            <img src="assets/images/bcl-logo.png" alt="BCL logo" />
+            <span class="brand-logo-shell">
+              <img src="assets/images/bcl-logo-white.png" alt="Brisbane Champions League logo" />
+            </span>
             <span class="brand-copy">
-              <span class="brand-label">Brisbane Champions League</span>
               <span class="brand-tag">Official league website</span>
+              <span class="brand-label">Brisbane Champions League</span>
             </span>
           </a>
           <button class="nav-toggle" aria-label="Open navigation" aria-expanded="false">
@@ -93,9 +94,13 @@ const BCL = {
     mount.innerHTML = `
       <footer class="site-footer">
         <div class="container footer-grid">
-          <div>
-            <img class="footer-logo" src="assets/images/bcl-logo.png" alt="BCL logo" />
-            <p>Brisbane Champions League is a premium multicultural cricket property built for fixtures, results, news, sponsors and league storytelling.</p>
+          <div class="footer-brand-panel">
+            <div class="footer-logo-shell"><img class="footer-logo" src="assets/images/bcl-logo-white.png" alt="BCL logo" /></div>
+            <p>Brisbane Champions League is a premium multicultural cricket platform built for fixtures, standings, teams, news, sponsors and matchday storytelling.</p>
+          </div>
+          <div class="footer-brand-panel">
+            <div class="footer-logo-shell small"><img class="footer-logo partner" src="assets/images/amcc-logo-white.png" alt="AMCC logo" /></div>
+            <p>In partnership with the Australian Multicultural Cricket Council, supporting community pathways and stronger digital presentation for the sport.</p>
           </div>
           <div>
             <h4>Explore</h4>
@@ -106,16 +111,16 @@ const BCL = {
             <a href="news.html">News</a>
           </div>
           <div>
-            <h4>AMCC</h4>
+            <h4>Contact</h4>
             <a href="amcc.html">About AMCC</a>
             <a href="${this.site?.contactWebsite || '#'}" target="_blank" rel="noreferrer">multiculturalcricket.com.au</a>
             <a href="mailto:${this.site?.contactEmail || ''}">${this.site?.contactEmail || ""}</a>
-            <div>${phones}</div>
+            <div class="footer-phone-list">${phones}</div>
           </div>
         </div>
         <div class="container footer-bottom">
           <span>© <span data-year></span> Brisbane Champions League</span>
-          <span>Official competition platform</span>
+          <span>Wide Banner + Tiles First</span>
         </div>
       </footer>`;
   },
@@ -143,25 +148,148 @@ const BCL = {
     });
   },
 
+  resolveMediaUrl(src) {
+    if (!src) return "";
+    try {
+      return new URL(src, document.baseURI).href;
+    } catch (error) {
+      return src;
+    }
+  },
+
+  applySiteMedia() {
+    const images = this.site?.homeImages || {};
+    const social = this.site?.socialLinks || {};
+    const socialText = this.site?.socialText || {};
+
+    const root = document.documentElement;
+    const bannerUrl = this.resolveMediaUrl(images.wideBanner);
+    const teamsTileUrl = this.resolveMediaUrl(images.teamsTile);
+    const fixturesTileUrl = this.resolveMediaUrl(images.fixturesTile);
+    const pointsTileUrl = this.resolveMediaUrl(images.pointsTile);
+
+    if (bannerUrl) {
+      root.style.setProperty("--home-wide-banner-image", `url("${bannerUrl}")`);
+      const banner = document.querySelector("#home-hero-banner");
+      if (banner) banner.style.backgroundImage = `url("${bannerUrl}")`;
+    }
+
+    if (teamsTileUrl) {
+      root.style.setProperty("--home-teams-tile-image", `url("${teamsTileUrl}")`);
+      const tileTeams = document.querySelector("#home-tile-teams");
+      if (tileTeams) tileTeams.style.setProperty("--tile-image", `url("${teamsTileUrl}")`);
+    }
+
+    if (fixturesTileUrl) {
+      root.style.setProperty("--home-fixtures-tile-image", `url("${fixturesTileUrl}")`);
+      const tileFixtures = document.querySelector("#home-tile-fixtures");
+      if (tileFixtures) tileFixtures.style.setProperty("--tile-image", `url("${fixturesTileUrl}")`);
+    }
+
+    if (pointsTileUrl) {
+      root.style.setProperty("--home-points-tile-image", `url("${pointsTileUrl}")`);
+      const tilePoints = document.querySelector("#home-tile-points");
+      if (tilePoints) tilePoints.style.setProperty("--tile-image", `url("${pointsTileUrl}")`);
+    }
+
+    const fb = document.querySelector("#hero-facebook");
+    if (fb) {
+      if (social.facebook) fb.href = social.facebook;
+      else fb.hidden = true;
+      const txt = document.querySelector("#hero-facebook-text");
+      if (txt && socialText.facebook) txt.textContent = socialText.facebook;
+    }
+
+    const wa = document.querySelector("#hero-whatsapp");
+    if (wa) {
+      if (social.whatsapp) wa.href = social.whatsapp;
+      else wa.hidden = true;
+      const txt = document.querySelector("#hero-whatsapp-text");
+      if (txt && socialText.whatsapp) txt.textContent = socialText.whatsapp;
+    }
+  },
+
   async fetchJson(url) {
     const response = await fetch(url, { cache: "no-store" });
     if (!response.ok) throw new Error(`Failed to load ${url}`);
     return response.json();
   },
 
-  async getMatches() {
+  displaySeasonLabel(season, index = 0) {
+    const value = String(season || "").trim();
+    return value || `Season ${index + 1}`;
+  },
+
+  normalizePointsSeasons(data = {}) {
+    const seasons = Array.isArray(data.seasons)
+      ? data.seasons
+      : [{ season: data.season || this.site?.season || "", updated: data.updated, groups: data.groups, table: data.table || [] }];
+
+    return seasons.map((season, seasonIndex) => {
+      const explicitGroups = Array.isArray(season.groups) && season.groups.length
+        ? season.groups
+        : [{ name: season.group || "Standings", table: season.table || [] }];
+
+      const groups = explicitGroups.map((group, groupIndex) => {
+        const groupName = group.name || group.group || `Group ${groupIndex + 1}`;
+        const table = (group.table || []).map((row, rowIndex) => ({
+          position: row.position ?? rowIndex + 1,
+          team: row.team || "Team",
+          played: row.played ?? 0,
+          won: row.won ?? 0,
+          lost: row.lost ?? 0,
+          tied: row.tied ?? 0,
+          nr: row.nr ?? 0,
+          points: row.points ?? 0,
+          nrr: row.nrr ?? "0.000",
+          group: row.group || groupName
+        }));
+        return { name: groupName, table };
+      });
+
+      return {
+        season: this.displaySeasonLabel(season.season, seasonIndex),
+        rawSeason: season.season || "",
+        updated: season.updated,
+        groups
+      };
+    }).filter((season) => Array.isArray(season.groups));
+  },
+
+  normalizeFixtureSeasons(data = {}) {
+    const seasons = Array.isArray(data.seasons)
+      ? data.seasons
+      : [{ season: data.season || this.site?.season || "", matches: data.matches || [] }];
+
+    return seasons.map((season, index) => ({
+      season: this.displaySeasonLabel(season.season, index),
+      rawSeason: season.season || "",
+      matches: Array.isArray(season.matches) ? season.matches : []
+    }));
+  },
+
+  flattenStandingsGroups(groups = []) {
+    return groups.flatMap((group) => (group.table || []).map((row) => ({ ...row, group: row.group || group.name || "Standings" })));
+  },
+
+  async getFixtureSeasons() {
     const config = this.site || {};
     if (config.useLiveApi && config.apiEndpoint) {
       try {
         const liveData = await this.fetchJson(`${config.apiEndpoint}?season=${config.season || "2025"}`);
-        if (liveData?.matches || liveData?.items) {
-          return { matches: liveData.matches || liveData.items };
-        }
+        const normalizedLive = this.normalizeFixtureSeasons(liveData || {});
+        if (normalizedLive.length) return normalizedLive;
       } catch (error) {
         console.warn("Using standard fixture data", error);
       }
     }
-    return this.fetchJson("data/fixtures.json");
+    const data = await this.fetchJson("data/fixtures.json");
+    return this.normalizeFixtureSeasons(data);
+  },
+
+  async getMatches() {
+    const seasons = await this.getFixtureSeasons();
+    return seasons.find((season) => (season.matches || []).length) || seasons[0] || { season: this.displaySeasonLabel(this.site?.season || "", 0), matches: [] };
   },
 
   async renderHomeMatches() {
@@ -193,7 +321,6 @@ const BCL = {
       </article>
     `).join("");
   },
-
 
   async renderHomeHeroCarousel() {
     const mount = document.querySelector("#home-hero-carousel");
@@ -265,6 +392,7 @@ const BCL = {
       activate((currentIndex + 1) % slides.length);
     }, 3800);
   },
+
   async renderHomeShowcase() {
     const mount = document.querySelector("#home-showcase-carousel");
     if (!mount) return;
@@ -272,55 +400,64 @@ const BCL = {
     const [pointsSeasons, teamsData, fixturesData, galleryData] = await Promise.all([
       this.getPointsData().catch(() => []),
       this.getTeams().catch(() => ({ teams: [] })),
-      this.getMatches().catch(() => ({ matches: [] })),
-      this.fetchJson("data/gallery.json").catch(() => ({ items: [] }))
+      this.getMatches().catch(() => ({ season: this.displaySeasonLabel(this.site?.season || "", 0), matches: [] })),
+      this.getGalleryItems().catch(() => ({ items: [] }))
     ]);
 
-    const topPoints = pointsSeasons[0]?.table?.slice(0, 4) || [];
+    const activePointsSeason = pointsSeasons[0] || { groups: [] };
+    const leaders = activePointsSeason.groups.flatMap((group) => (group.table || []).slice(0, 2).map((row) => ({ ...row, group: group.name })));
     const topTeams = (teamsData.teams || []).slice(0, 4);
     const upcomingMatches = (fixturesData.matches || []).slice(0, 3);
     const galleryItems = (galleryData.items || []).slice(0, 4);
 
     const slides = [
       {
-        title: "Points table",
-        subtitle: "Current top teams",
+        title: "Groups",
+        subtitle: `Standings • ${activePointsSeason.season || this.displaySeasonLabel(this.site?.season || "", 0)}`,
         cta: "points-table.html",
         ctaText: "Open full table",
-        content: `
-          <ul class="showcase-list">
-            ${topPoints.map((row) => `<li><strong>#${row.position} ${row.team}</strong><span>${row.points} pts</span></li>`).join("")}
-          </ul>`
+        content: leaders.length
+          ? `
+            <ul class="showcase-list">
+              ${leaders.map((row) => `<li><strong>${row.group}: ${row.team}</strong><span>${row.points} pts</span></li>`).join("")}
+            </ul>`
+          : `<p>No standings entered yet. Update <code>data/points-table.json</code> to publish the group tables.</p>`
       },
       {
         title: "Teams",
         subtitle: "Competition franchises",
         cta: "teams.html",
         ctaText: "View all teams",
-        content: `
-          <ul class="showcase-list">
-            ${topTeams.map((team) => `<li><strong>${team.name}</strong><span>${team.city || "League team"}</span></li>`).join("")}
-          </ul>`
+        content: topTeams.length
+          ? `
+            <ul class="showcase-list">
+              ${topTeams.map((team) => `<li><strong>${team.name}</strong><span>${team.group || team.city || "League team"}</span></li>`).join("")}
+            </ul>`
+          : `<p>No team profiles available yet.</p>`
       },
       {
         title: "Matches",
-        subtitle: "Upcoming fixtures",
+        subtitle: `Fixtures • ${fixturesData.season || this.displaySeasonLabel(this.site?.season || "", 0)}`,
         cta: "fixtures-results.html",
         ctaText: "Open fixtures",
-        content: `
-          <ul class="showcase-list">
-            ${upcomingMatches.map((match) => `<li><strong>${match.homeTeam} vs ${match.awayTeam}</strong><span>${this.formatDate(match.date)}</span></li>`).join("")}
-          </ul>`
+        content: upcomingMatches.length
+          ? `
+            <ul class="showcase-list">
+              ${upcomingMatches.map((match) => `<li><strong>${match.homeTeam} vs ${match.awayTeam}</strong><span>${this.formatDate(match.date)}</span></li>`).join("")}
+            </ul>`
+          : `<p>No matches scheduled for ${fixturesData.season || "this season"}.</p>`
       },
       {
         title: "Gallery",
         subtitle: "Latest visuals",
         cta: "gallery.html",
         ctaText: "Browse gallery",
-        content: `
-          <div class="showcase-gallery">
-            ${galleryItems.map((item) => `<img src="${item.src}" alt="${item.title || "Gallery image"}" loading="lazy" onerror="this.src='assets/images/gallery-placeholder.svg'" />`).join("")}
-          </div>`
+        content: galleryItems.length
+          ? `
+            <div class="showcase-gallery">
+              ${galleryItems.map((item) => `<img src="${item.src}" alt="${item.title || "Gallery image"}" loading="lazy" onerror="this.src='assets/images/gallery-placeholder.svg'" />`).join("")}
+            </div>`
+          : `<p>Add photos to the configured gallery folder to populate this section automatically.</p>`
       }
     ];
 
@@ -363,11 +500,8 @@ const BCL = {
     }, 4200);
   },
 
-  async renderFixtures() {
-    const mount = document.querySelector("#fixtures-grid");
-    if (!mount) return;
-    const data = await this.getMatches();
-    mount.innerHTML = (data.matches || []).map((match) => `
+  renderFixtureCards(matches = []) {
+    return matches.map((match) => `
       <article class="fixture-card">
         <div class="fixture-head">
           <div>
@@ -376,7 +510,7 @@ const BCL = {
           </div>
           <span class="match-status ${this.statusClass(match.status)}">${match.status || "Upcoming"}</span>
         </div>
-        <p class="match-venue">${match.venue || ""}</p>
+        <p class="match-venue">${match.venue || "Venue TBC"}</p>
         <div class="fixture-sides">
           <div class="team-line"><span>${match.homeTeam}</span><strong>${match.homeScore || "-"}</strong></div>
           <div class="team-line"><span>${match.awayTeam}</span><strong>${match.awayScore || "-"}</strong></div>
@@ -390,15 +524,53 @@ const BCL = {
     `).join("");
   },
 
-  async getPointsData() {
-    const data = await this.fetchJson("data/points-table.json");
-    const seasonGroups = Array.isArray(data.seasons)
-      ? data.seasons
-      : [{ season: data.season || this.site?.season || "Season", updated: data.updated, table: data.table || [] }];
-    return seasonGroups.filter((item) => Array.isArray(item.table));
+  async renderFixtures() {
+    const mount = document.querySelector("#fixtures-shell");
+    if (!mount) return;
+
+    const seasons = await this.getFixtureSeasons();
+    if (!seasons.length) {
+      mount.innerHTML = '<div class="empty-state"><strong>No fixture seasons configured.</strong><p>Add a season to <code>data/fixtures.json</code> to show fixtures here.</p></div>';
+      return;
+    }
+
+    const options = seasons.map((item, index) => `<option value="${index}">${item.season}</option>`).join("");
+    mount.innerHTML = `
+      <div class="points-filter-row fixture-filter-row">
+        <label for="fixture-season-select">Season</label>
+        <select id="fixture-season-select" class="season-select">${options}</select>
+      </div>
+      <div class="grid grid-2" id="fixtures-grid"></div>
+    `;
+
+    const grid = mount.querySelector("#fixtures-grid");
+    const select = mount.querySelector("#fixture-season-select");
+
+    const renderSeason = (index) => {
+      const selected = seasons[Number(index)] || seasons[0];
+      const matches = selected.matches || [];
+      if (!matches.length) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <strong>No matches scheduled.</strong>
+            <p>No fixtures are available for ${selected.season || "this season"}. Add matches to <code>data/fixtures.json</code> to publish them here.</p>
+          </div>
+        `;
+        return;
+      }
+      grid.innerHTML = this.renderFixtureCards(matches);
+    };
+
+    select?.addEventListener("change", (event) => renderSeason(event.target.value));
+    renderSeason(0);
   },
 
-  renderPointsTableMarkup(rows, updated, includeNote = true) {
+  async getPointsData() {
+    const data = await this.fetchJson("data/points-table.json");
+    return this.normalizePointsSeasons(data);
+  },
+
+  renderSingleTableMarkup(rows) {
     return `
       <div class="table-wrap">
         <table class="league-table">
@@ -422,16 +594,37 @@ const BCL = {
           </tbody>
         </table>
       </div>
-      ${includeNote && updated ? `<p class="table-note">Updated ${new Date(updated).toLocaleString("en-AU")}</p>` : ""}
+    `;
+  },
+
+  renderPointsTableMarkup(season, limit = 999, includeNote = true) {
+    const groups = season?.groups || [];
+    return `
+      <div class="group-table-grid">
+        ${groups.map((group) => `
+          <section class="group-table-card">
+            <div class="group-table-head">
+              <div>
+                <p class="eyebrow group-table-eyebrow">Standings</p>
+                <h3>${group.name || "Group"}</h3>
+              </div>
+              <span class="badge-chip ghost">${(group.table || []).length} teams</span>
+            </div>
+            ${this.renderSingleTableMarkup((group.table || []).slice(0, limit))}
+          </section>
+        `).join("")}
+      </div>
+      ${includeNote && season?.updated ? `<p class="table-note">Updated ${new Date(season.updated).toLocaleString("en-AU")}</p>` : ""}
     `;
   },
 
   async renderPointsTable(selector, limit = 999) {
     const mount = document.querySelector(selector);
     if (!mount) return;
+
     const seasons = await this.getPointsData();
     if (!seasons.length) {
-      mount.innerHTML = "<p>No standings available.</p>";
+      mount.innerHTML = '<div class="empty-state"><strong>No standings available.</strong><p>Add group tables to <code>data/points-table.json</code> to publish them here.</p></div>';
       return;
     }
 
@@ -448,26 +641,36 @@ const BCL = {
       const select = mount.querySelector("#season-select");
       const renderSeason = (index) => {
         const selected = seasons[Number(index)] || seasons[0];
-        content.innerHTML = this.renderPointsTableMarkup((selected.table || []).slice(0, limit), selected.updated, true);
+        content.innerHTML = this.renderPointsTableMarkup(selected, limit, true);
       };
       select?.addEventListener("change", (event) => renderSeason(event.target.value));
       renderSeason(0);
       return;
     }
 
-    const current = seasons[0];
-    mount.innerHTML = this.renderPointsTableMarkup((current.table || []).slice(0, limit), current.updated, false);
+    mount.innerHTML = this.renderPointsTableMarkup(seasons[0], limit, false);
   },
 
   async getTeams() {
-    const [meta, tableData, fixtureData] = await Promise.all([
+    const [meta, pointsSeasons, fixtureSeasons] = await Promise.all([
       this.fetchJson("data/teams.json").catch(() => null),
-      this.fetchJson("data/points-table.json").catch(() => ({ table: [] })),
-      this.fetchJson("data/fixtures.json").catch(() => ({ matches: [] }))
+      this.getPointsData().catch(() => []),
+      this.getFixtureSeasons().catch(() => [])
     ]);
-    const activeTable = Array.isArray(tableData.seasons) ? tableData.seasons[0]?.table || [] : tableData.table || [];
+
+    const activeSeason = pointsSeasons[0] || { groups: [] };
+    const rows = this.flattenStandingsGroups(activeSeason.groups);
+    const rowOrder = new Map();
+    rows.forEach((row, index) => rowOrder.set(row.team, index));
+
+    const groupOrder = new Map();
+    (meta?.groups || activeSeason.groups || []).forEach((group, index) => {
+      const groupName = typeof group === "string" ? group : group.name;
+      if (groupName) groupOrder.set(groupName, index);
+    });
+
     const map = new Map();
-    activeTable.forEach((row) => {
+    rows.forEach((row) => {
       map.set(row.team, {
         name: row.team,
         slug: this.slugify(row.team),
@@ -477,21 +680,36 @@ const BCL = {
         lost: row.lost,
         nr: row.nr,
         points: row.points,
-        nrr: row.nrr
+        nrr: row.nrr,
+        group: row.group
       });
     });
+
     (meta?.teams || []).forEach((team) => {
       const existing = map.get(team.name) || { name: team.name, slug: team.slug || this.slugify(team.name) };
-      map.set(team.name, { ...existing, ...team, slug: team.slug || existing.slug || this.slugify(team.name) });
-    });
-    (fixtureData.matches || []).forEach((match) => {
-      [match.homeTeam, match.awayTeam].forEach((name) => {
-        if (name && !map.has(name)) map.set(name, { name, slug: this.slugify(name) });
+      map.set(team.name, {
+        ...existing,
+        ...team,
+        group: team.group || existing.group,
+        slug: team.slug || existing.slug || this.slugify(team.name)
       });
     });
+
+    fixtureSeasons.forEach((season) => {
+      (season.matches || []).forEach((match) => {
+        [match.homeTeam, match.awayTeam].forEach((name) => {
+          if (name && !map.has(name)) map.set(name, { name, slug: this.slugify(name) });
+        });
+      });
+    });
+
     return {
-      season: meta?.season || tableData.season || this.site?.season || "",
-      teams: Array.from(map.values()).sort((a, b) => (a.position ?? 999) - (b.position ?? 999) || a.name.localeCompare(b.name))
+      season: meta?.season || activeSeason.season || this.displaySeasonLabel(this.site?.season || "", 0),
+      teams: Array.from(map.values()).sort((a, b) =>
+        (groupOrder.get(a.group) ?? 999) - (groupOrder.get(b.group) ?? 999) ||
+        (rowOrder.get(a.name) ?? 999) - (rowOrder.get(b.name) ?? 999) ||
+        a.name.localeCompare(b.name)
+      )
     };
   },
 
@@ -512,15 +730,16 @@ const BCL = {
           </div>
           <div class="team-body">
             <div class="team-row">
-              <span class="badge-chip">${team.city || "League team"}</span>
+              <span class="badge-chip">${team.group || team.city || "League team"}</span>
               <span class="team-rank">${standing}</span>
             </div>
             <h3>${team.name}</h3>
-            <p>${team.summary || "Official team profile with match context, form and venue details."}</p>
+            <p class="team-location">${team.city || "Official league franchise"}</p>
+            <p>${team.summary || "Official team profile. Update the club details from data/teams.json whenever you are ready."}</p>
             <dl class="team-meta">
+              <div><dt>Group</dt><dd>${team.group || "—"}</dd></div>
               <div><dt>Record</dt><dd>${record}</dd></div>
               <div><dt>Points</dt><dd>${team.points ?? "—"}</dd></div>
-              <div><dt>NRR</dt><dd>${team.nrr ?? "—"}</dd></div>
               <div><dt>Home Ground</dt><dd>${team.homeGround || "TBC"}</dd></div>
             </dl>
           </div>
@@ -669,11 +888,69 @@ const BCL = {
     this.updateGalleryModal();
   },
 
+  titleFromPath(value = "") {
+    return value
+      .split("/")
+      .pop()
+      ?.replace(/\.[^.]+$/, "")
+      .replace(/[-_]+/g, " ")
+      .trim() || "Gallery image";
+  },
+
+  async getGalleryItems() {
+    const config = await this.fetchJson("data/gallery.json").catch(() => ({}));
+    const folder = config.folder || "photos/gallery";
+    let items = [];
+
+    if (config.folder) {
+      try {
+        const folderData = await this.fetchJson(`${folder.replace(/\/+$/, "")}/index.json`);
+        items = Array.isArray(folderData) ? folderData : (folderData.items || []);
+      } catch (error) {
+        console.warn("Using gallery items from data/gallery.json", error);
+      }
+    }
+
+    if (!items.length && Array.isArray(config.items)) {
+      items = config.items;
+    }
+
+    return {
+      folder,
+      items: items
+        .map((item) => {
+          if (typeof item === "string") {
+            return { src: item, title: this.titleFromPath(item), caption: "" };
+          }
+          const src = item.src || item.path || "";
+          if (!src) return null;
+          return {
+            src,
+            title: item.title || this.titleFromPath(src),
+            caption: item.caption || ""
+          };
+        })
+        .filter(Boolean)
+    };
+  },
+
   async renderGallery(selector, limit = 999) {
     const mount = document.querySelector(selector);
     if (!mount) return;
-    const data = await this.fetchJson("data/gallery.json");
-    this.galleryItems = data.items || [];
+
+    const gallery = await this.getGalleryItems();
+    this.galleryItems = gallery.items || [];
+
+    if (!this.galleryItems.length) {
+      mount.innerHTML = `
+        <div class="empty-state">
+          <strong>No gallery photos found.</strong>
+          <p>Upload images into <code>${gallery.folder}</code> and run the gallery build step to make them appear here automatically.</p>
+        </div>
+      `;
+      return;
+    }
+
     mount.innerHTML = this.galleryItems.slice(0, limit).map((item, index) => `
       <figure class="gallery-card">
         <button class="gallery-open" data-gallery-index="${index}" type="button" aria-label="Open ${item.title || 'gallery image'}">
@@ -701,8 +978,10 @@ const BCL = {
   },
 
   formatDate(dateString) {
-    if (!dateString) return "";
-    return new Date(dateString).toLocaleDateString("en-AU", { day: "numeric", month: "short", year: "numeric" });
+    if (!dateString) return "Date TBC";
+    const date = new Date(dateString);
+    if (Number.isNaN(date.getTime())) return dateString;
+    return date.toLocaleDateString("en-AU", { day: "numeric", month: "short", year: "numeric" });
   },
 
   statusClass(status) {

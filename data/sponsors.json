@@ -3,19 +3,19 @@
     {
       "name": "AMCC",
       "tier": "Principal Partner",
-      "logo": "assets/images/amcc-logo.png",
+      "logo": "assets/images/amcc-logo-white.png",
       "url": "https://www.multiculturalcricket.com.au"
     },
     {
       "name": "Your Sponsor Here",
       "tier": "Official Partner",
-      "logo": "assets/images/bcl-logo.png",
+      "logo": "assets/images/bcl-logo-white.png",
       "url": "#"
     },
     {
       "name": "Community Partner",
       "tier": "Community Partner",
-      "logo": "assets/images/amcc-logo.png",
+      "logo": "assets/images/amcc-logo-white.png",
       "url": "#"
     }
   ]

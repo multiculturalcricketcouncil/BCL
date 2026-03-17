@@ -1,72 +1,130 @@
 {
-  "season": "2025",
-  "updated": "2025-04-12T16:00:00+10:00",
-  "table": [
+  "seasons": [
     {
-      "position": 1,
-      "team": "Brisbane Falcons",
-      "played": 3,
-      "won": 3,
-      "lost": 0,
-      "tied": 0,
-      "nr": 0,
-      "points": 6,
-      "nrr": "+1.238"
-    },
-    {
-      "position": 2,
-      "team": "Logan Lions",
-      "played": 3,
-      "won": 2,
-      "lost": 1,
-      "tied": 0,
-      "nr": 0,
-      "points": 4,
-      "nrr": "+0.772"
-    },
-    {
-      "position": 3,
-      "team": "Western Warriors",
-      "played": 3,
-      "won": 2,
-      "lost": 1,
-      "tied": 0,
-      "nr": 0,
-      "points": 4,
-      "nrr": "+0.241"
-    },
-    {
-      "position": 4,
-      "team": "Metro Kings",
-      "played": 3,
-      "won": 1,
-      "lost": 2,
-      "tied": 0,
-      "nr": 0,
-      "points": 2,
-      "nrr": "-0.114"
-    },
-    {
-      "position": 5,
-      "team": "Southside Strikers",
-      "played": 3,
-      "won": 1,
-      "lost": 2,
-      "tied": 0,
-      "nr": 0,
-      "points": 2,
-      "nrr": "-0.601"
-    },
-    {
-      "position": 6,
-      "team": "River City Royals",
-      "played": 3,
-      "won": 0,
-      "lost": 3,
-      "tied": 0,
-      "nr": 0,
-      "points": 0,
-      "nrr": "-1.536"
+      "season": "2025-26",
+      "updated": "2026-03-16T18:30:00+10:00",
+      "groups": [
+        {
+          "name": "Group A",
+          "table": [
+            {
+              "position": 1,
+              "team": "Neapoleans",
+              "played": 0,
+              "won": 0,
+              "lost": 0,
+              "tied": 0,
+              "nr": 0,
+              "points": 0,
+              "nrr": "0.000"
+            },
+            {
+              "position": 2,
+              "team": "Iconic Super Knights",
+              "played": 0,
+              "won": 0,
+              "lost": 0,
+              "tied": 0,
+              "nr": 0,
+              "points": 0,
+              "nrr": "0.000"
+            },
+            {
+              "position": 3,
+              "team": "Melbourne Tuskers",
+              "played": 0,
+              "won": 0,
+              "lost": 0,
+              "tied": 0,
+              "nr": 0,
+              "points": 0,
+              "nrr": "0.000"
+            },
+            {
+              "position": 4,
+              "team": "QC Multicultural XI",
+              "played": 0,
+              "won": 0,
+              "lost": 0,
+              "tied": 0,
+              "nr": 0,
+              "points": 0,
+              "nrr": "0.000"
+            },
+            {
+              "position": 5,
+              "team": "Perth United Warriors",
+              "played": 0,
+              "won": 0,
+              "lost": 0,
+              "tied": 0,
+              "nr": 0,
+              "points": 0,
+              "nrr": "0.000"
+            }
+          ]
+        },
+        {
+          "name": "Group B",
+          "table": [
+            {
+              "position": 1,
+              "team": "Melbourne Pirates",
+              "played": 0,
+              "won": 0,
+              "lost": 0,
+              "tied": 0,
+              "nr": 0,
+              "points": 0,
+              "nrr": "0.000"
+            },
+            {
+              "position": 2,
+              "team": "Everest Falcons",
+              "played": 0,
+              "won": 0,
+              "lost": 0,
+              "tied": 0,
+              "nr": 0,
+              "points": 0,
+              "nrr": "0.000"
+            },
+            {
+              "position": 3,
+              "team": "Sydney Kangaroos",
+              "played": 0,
+              "won": 0,
+              "lost": 0,
+              "tied": 0,
+              "nr": 0,
+              "points": 0,
+              "nrr": "0.000"
+            },
+            {
+              "position": 4,
+              "team": "Genid Royals",
+              "played": 0,
+              "won": 0,
+              "lost": 0,
+              "tied": 0,
+              "nr": 0,
+              "points": 0,
+              "nrr": "0.000"
+            },
+            {
+              "position": 5,
+              "team": "New York Liberty XI",
+              "played": 0,
+              "won": 0,
+              "lost": 0,
+              "tied": 0,
+              "nr": 0,
+              "points": 0,
+              "nrr": "0.000"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
