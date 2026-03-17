@@ -656,3 +656,495 @@ body[data-page="home"] .hero-alt-copy p{
   letter-spacing:.14em;
   overflow-wrap:anywhere;
 }
+
+/* --- 2026-03-18 final mobile responsiveness pass --- */
+@media (max-width: 860px){
+  .hero-alt-section{
+    grid-template-columns:1fr !important;
+    gap:18px;
+  }
+
+  .hero-alt-copy,
+  .hero-alt-side,
+  .hero-alt-copy.section-panel,
+  .hero-alt-side .section-panel{
+    width:100%;
+    min-width:0;
+  }
+
+  body[data-page="home"] .hero-alt-copy .section-title{
+    max-width:none;
+    font-size:clamp(1.8rem, 8vw, 2.8rem);
+    line-height:.96;
+    text-wrap:balance;
+    overflow-wrap:anywhere;
+  }
+
+  body[data-page="home"] .hero-alt-copy p,
+  body[data-page="teams"] .page-hero-panel p,
+  body[data-page="points"] .page-hero-panel p,
+  body[data-page="gallery"] .page-hero-panel p,
+  body[data-page="news"] .page-hero-panel p,
+  body[data-page="amcc"] .page-hero-panel p,
+  body[data-page="fixtures"] .page-hero-panel p{
+    max-width:none;
+  }
+
+  body[data-page="home"] .hero-alt-copy .hero-kpis{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .partner-lockup{
+    grid-template-columns:1fr;
+    align-items:start;
+    gap:14px;
+  }
+
+  .partner-lockup img{
+    max-width:160px;
+  }
+}
+
+@media (max-width: 680px){
+  #teams-grid.grid,
+  #home-teams.grid{
+    grid-template-columns:1fr !important;
+    gap:16px;
+  }
+
+  .team-card,
+  .team-card-simple,
+  .team-card-compact{
+    width:100%;
+    min-width:0;
+  }
+
+  .team-mark{
+    min-height:136px;
+    padding:14px;
+  }
+
+  .team-mark::before{
+    inset:12px;
+    border-radius:20px;
+  }
+
+  .team-mark img{
+    max-height:76px;
+  }
+
+  .team-badge{
+    width:50px;
+    height:50px;
+    font-size:.98rem;
+  }
+
+  .team-card-simple .team-body{
+    padding:14px 14px 16px;
+  }
+
+  .team-card-simple .team-row{
+    margin-bottom:10px;
+    gap:8px;
+  }
+
+  .team-card-simple .badge-chip{
+    max-width:calc(100% - 64px);
+    padding:8px 12px;
+    line-height:1.15;
+    white-space:normal;
+  }
+
+  .team-card-simple .team-rank{
+    flex:0 0 auto;
+    font-size:.76rem;
+  }
+
+  .team-card-simple h3{
+    margin:0;
+    font-size:clamp(1.2rem, 7vw, 1.6rem);
+    line-height:.95;
+    overflow-wrap:anywhere;
+  }
+
+  body[data-page="points"] .points-filter-row,
+  body[data-page="fixtures"] .fixture-filter-row{
+    justify-content:flex-start;
+    align-items:flex-start;
+  }
+
+  body[data-page="points"] .group-table-card,
+  body[data-page="home"] #home-points .group-table-card{
+    padding:14px;
+    border-radius:22px;
+  }
+
+  body[data-page="points"] .group-table-head,
+  body[data-page="home"] #home-points .group-table-head{
+    flex-direction:column;
+    gap:8px;
+  }
+
+  body[data-page="points"] .group-table-head .badge-chip,
+  body[data-page="home"] #home-points .group-table-head .badge-chip{
+    align-self:flex-start;
+  }
+
+  body[data-page="points"] .table-wrap,
+  body[data-page="home"] #home-points .table-wrap{
+    overflow-x:hidden;
+  }
+
+  body[data-page="points"] .league-table,
+  body[data-page="home"] #home-points .league-table{
+    min-width:0 !important;
+    width:100%;
+    table-layout:fixed;
+  }
+
+  body[data-page="points"] .league-table th,
+  body[data-page="points"] .league-table td,
+  body[data-page="home"] #home-points .league-table th,
+  body[data-page="home"] #home-points .league-table td{
+    padding:10px 8px;
+    font-size:.82rem;
+  }
+
+  body[data-page="points"] .league-table th:nth-child(3),
+  body[data-page="points"] .league-table td:nth-child(3),
+  body[data-page="points"] .league-table th:nth-child(4),
+  body[data-page="points"] .league-table td:nth-child(4),
+  body[data-page="points"] .league-table th:nth-child(5),
+  body[data-page="points"] .league-table td:nth-child(5),
+  body[data-page="points"] .league-table th:nth-child(6),
+  body[data-page="points"] .league-table td:nth-child(6),
+  body[data-page="points"] .league-table th:nth-child(8),
+  body[data-page="points"] .league-table td:nth-child(8),
+  body[data-page="home"] #home-points .league-table th:nth-child(3),
+  body[data-page="home"] #home-points .league-table td:nth-child(3),
+  body[data-page="home"] #home-points .league-table th:nth-child(4),
+  body[data-page="home"] #home-points .league-table td:nth-child(4),
+  body[data-page="home"] #home-points .league-table th:nth-child(5),
+  body[data-page="home"] #home-points .league-table td:nth-child(5),
+  body[data-page="home"] #home-points .league-table th:nth-child(6),
+  body[data-page="home"] #home-points .league-table td:nth-child(6),
+  body[data-page="home"] #home-points .league-table th:nth-child(8),
+  body[data-page="home"] #home-points .league-table td:nth-child(8){
+    display:none;
+  }
+
+  body[data-page="points"] .league-table th:nth-child(2),
+  body[data-page="points"] .league-table td:nth-child(2),
+  body[data-page="home"] #home-points .league-table th:nth-child(2),
+  body[data-page="home"] #home-points .league-table td:nth-child(2){
+    width:auto;
+    white-space:normal;
+    word-break:break-word;
+  }
+}
+
+@media (max-width: 480px){
+  :root{
+    --container:min(100vw - 20px, calc(100vw - 20px));
+  }
+
+  .section,
+  .section-last{
+    padding-bottom:26px;
+  }
+
+  .section-panel,
+  .compact-panel,
+  .page-hero-panel,
+  .team-body,
+  .news-body,
+  .fixture-card,
+  .sponsor-card,
+  .story-panel{
+    padding:16px;
+  }
+
+  .hero-alt-copy .hero-kpi{
+    padding:14px 12px;
+  }
+
+  .hero-alt-copy .hero-kpi strong{
+    font-size:clamp(1rem, 5.2vw, 1.2rem);
+  }
+
+  .hero-alt-copy .kpi-label{
+    font-size:.7rem;
+    letter-spacing:.12em;
+  }
+
+  body[data-page="points"] .league-table th,
+  body[data-page="points"] .league-table td,
+  body[data-page="home"] #home-points .league-table th,
+  body[data-page="home"] #home-points .league-table td{
+    padding:9px 7px;
+    font-size:.78rem;
+  }
+}
+
+/* --- 2026-03-18 final mobile responsiveness fixes --- */
+@media (max-width: 900px){
+  body{
+    overflow-x:hidden;
+  }
+
+  .hero-alt-section,
+  .hero-alt-side,
+  .split,
+  .group-table-grid,
+  .footer-grid{
+    min-width:0;
+  }
+
+  /* Home: stack the chosen-layout panel and standings preview */
+  body[data-page="home"] .hero-alt-section{
+    grid-template-columns:1fr !important;
+    gap:16px;
+  }
+
+  body[data-page="home"] .hero-alt-copy,
+  body[data-page="home"] .hero-alt-side,
+  body[data-page="home"] #home-points,
+  body[data-page="home"] #home-points .group-table-grid,
+  body[data-page="home"] #home-points .group-table-card,
+  body[data-page="home"] #home-points .table-wrap{
+    min-width:0;
+    width:100%;
+  }
+
+  body[data-page="home"] .hero-alt-copy .section-title{
+    max-width:none !important;
+    font-size:clamp(1.9rem, 10vw, 2.8rem);
+    line-height:0.96;
+    text-wrap:balance;
+    overflow-wrap:normal;
+    word-break:normal;
+  }
+
+  body[data-page="home"] .hero-alt-copy p,
+  body[data-page="home"] .partner-lockup p{
+    max-width:none;
+  }
+
+  body[data-page="home"] .hero-alt-copy .hero-kpis{
+    grid-template-columns:repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  body[data-page="home"] .hero-alt-side .compact-panel,
+  body[data-page="home"] .hero-alt-copy{
+    padding:18px;
+  }
+
+  body[data-page="home"] #home-points .group-table-head{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:10px;
+  }
+
+  /* Keep mobile tables readable by showing the most important columns */
+  body[data-page="home"] #home-points .league-table,
+  body[data-page="points"] .league-table{
+    width:100%;
+    table-layout:fixed;
+  }
+
+  body[data-page="home"] #home-points .league-table th,
+  body[data-page="home"] #home-points .league-table td,
+  body[data-page="points"] .league-table th,
+  body[data-page="points"] .league-table td{
+    min-width:0;
+  }
+
+  body[data-page="home"] #home-points .league-table th:nth-child(3),
+  body[data-page="home"] #home-points .league-table td:nth-child(3),
+  body[data-page="home"] #home-points .league-table th:nth-child(4),
+  body[data-page="home"] #home-points .league-table td:nth-child(4),
+  body[data-page="home"] #home-points .league-table th:nth-child(5),
+  body[data-page="home"] #home-points .league-table td:nth-child(5),
+  body[data-page="home"] #home-points .league-table th:nth-child(6),
+  body[data-page="home"] #home-points .league-table td:nth-child(6),
+  body[data-page="home"] #home-points .league-table th:nth-child(8),
+  body[data-page="home"] #home-points .league-table td:nth-child(8),
+  body[data-page="points"] .league-table th:nth-child(3),
+  body[data-page="points"] .league-table td:nth-child(3),
+  body[data-page="points"] .league-table th:nth-child(4),
+  body[data-page="points"] .league-table td:nth-child(4),
+  body[data-page="points"] .league-table th:nth-child(5),
+  body[data-page="points"] .league-table td:nth-child(5),
+  body[data-page="points"] .league-table th:nth-child(6),
+  body[data-page="points"] .league-table td:nth-child(6),
+  body[data-page="points"] .league-table th:nth-child(8),
+  body[data-page="points"] .league-table td:nth-child(8){
+    display:none;
+  }
+
+  body[data-page="home"] #home-points .league-table th:nth-child(1),
+  body[data-page="home"] #home-points .league-table td:nth-child(1),
+  body[data-page="points"] .league-table th:nth-child(1),
+  body[data-page="points"] .league-table td:nth-child(1){
+    width:56px;
+  }
+
+  body[data-page="home"] #home-points .league-table th:nth-child(2),
+  body[data-page="home"] #home-points .league-table td:nth-child(2),
+  body[data-page="points"] .league-table th:nth-child(2),
+  body[data-page="points"] .league-table td:nth-child(2){
+    width:auto;
+    white-space:normal;
+    word-break:break-word;
+    overflow-wrap:anywhere;
+  }
+
+  body[data-page="home"] #home-points .league-table th:last-child,
+  body[data-page="home"] #home-points .league-table td:last-child,
+  body[data-page="points"] .league-table th:last-child,
+  body[data-page="points"] .league-table td:last-child{
+    width:64px;
+    text-align:right;
+  }
+
+  /* Team cards: override the later 5-column desktop rule */
+  #home-teams.grid,
+  #teams-grid.grid{
+    grid-template-columns:repeat(2, minmax(0, 1fr)) !important;
+    gap:14px;
+  }
+
+  .team-card,
+  .news-card,
+  .fixture-card,
+  .gallery-card,
+  .sponsor-card,
+  .section-panel,
+  .group-table-card{
+    min-width:0;
+  }
+
+  .team-mark,
+  .team-card-compact .team-mark{
+    min-height:132px;
+    padding:14px;
+  }
+
+  .team-mark::before{
+    inset:14px;
+  }
+
+  .team-mark img,
+  .team-card-compact .team-mark img{
+    max-height:72px;
+  }
+
+  .team-badge{
+    width:50px;
+    height:50px;
+    font-size:1rem;
+  }
+
+  .team-card-simple .team-body{
+    padding:14px 14px 16px;
+  }
+
+  .team-card-simple .team-row{
+    align-items:flex-start;
+    gap:8px;
+    margin-bottom:10px;
+  }
+
+  .team-card-simple .badge-chip{
+    padding:8px 12px;
+    font-size:.68rem;
+    letter-spacing:.14em;
+  }
+
+  .team-card h3,
+  .team-card-simple h3{
+    font-size:1.16rem;
+    line-height:0.96;
+    margin:0;
+    text-wrap:balance;
+    overflow-wrap:normal;
+    word-break:normal;
+  }
+
+  .page-hero-panel,
+  .compact-panel,
+  .section-panel,
+  .news-body,
+  .fixture-card,
+  .sponsor-card{
+    padding:18px;
+  }
+}
+
+@media (max-width: 520px){
+  :root{
+    --container:min(100vw - 20px, calc(100vw - 20px));
+  }
+
+  body[data-page="home"] .hero-alt-copy .hero-kpis{
+    grid-template-columns:1fr 1fr !important;
+  }
+
+  body[data-page="home"] .hero-kpi{
+    padding:14px 12px;
+  }
+
+  body[data-page="home"] .hero-kpi strong{
+    font-size:clamp(.98rem, 5.2vw, 1.2rem);
+  }
+
+  body[data-page="home"] .kpi-label{
+    font-size:.7rem;
+    line-height:1.3;
+  }
+
+  #home-teams.grid,
+  #teams-grid.grid{
+    grid-template-columns:1fr !important;
+  }
+
+  .team-mark,
+  .team-card-compact .team-mark{
+    min-height:144px;
+  }
+
+  .team-mark img,
+  .team-card-compact .team-mark img{
+    max-height:78px;
+  }
+
+  body[data-page="points"] .group-table-card,
+  body[data-page="home"] #home-points .group-table-card{
+    padding:12px;
+  }
+
+  body[data-page="points"] .league-table th,
+  body[data-page="points"] .league-table td,
+  body[data-page="home"] #home-points .league-table th,
+  body[data-page="home"] #home-points .league-table td{
+    padding:10px 8px;
+    font-size:.8rem;
+  }
+
+  body[data-page="points"] .group-table-head h3,
+  body[data-page="home"] #home-points .group-table-head h3{
+    font-size:1.25rem;
+    line-height:1.02;
+  }
+
+  .page-hero-panel .section-title,
+  body[data-page="home"] .hero-alt-copy .section-title{
+    font-size:clamp(1.75rem, 11vw, 2.35rem);
+  }
+
+  .page-hero-panel p,
+  body[data-page="home"] .hero-alt-copy p{
+    font-size:.98rem;
+    line-height:1.7;
+  }
+}
