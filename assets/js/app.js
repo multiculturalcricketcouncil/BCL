@@ -12,6 +12,7 @@ const BCL = {
     this.bindGalleryModalEvents();
     await this.routePage();
     this.applySiteMedia();
+    this.applyConfiguredLogos();
   },
 
   async routePage() {
@@ -23,7 +24,7 @@ const BCL = {
           this.renderNewsCards("#home-news", 3),
           this.renderSponsors("#sponsors-grid"),
           this.renderGallery("#gallery-grid", 6),
-          this.renderTeams("#home-teams", 6)
+          this.renderTeams("#home-teams", 10, true)
         ]);
         break;
       case "fixtures":
@@ -70,7 +71,7 @@ const BCL = {
         <div class="container header-inner">
           <a class="brand" href="index.html" aria-label="Brisbane Champions League home">
             <span class="brand-logo-shell">
-              <img src="assets/images/bcl-logo-white.png" alt="Brisbane Champions League logo" />
+              <img src="${this.getLogoPath("bcl", "assets/images/bcl-logo.png")}" alt="Brisbane Champions League logo" data-site-logo="bcl" />
             </span>
             <span class="brand-copy">
               <span class="brand-tag">Official league website</span>
@@ -95,11 +96,11 @@ const BCL = {
       <footer class="site-footer">
         <div class="container footer-grid">
           <div class="footer-brand-panel">
-            <div class="footer-logo-shell"><img class="footer-logo" src="assets/images/bcl-logo-white.png" alt="BCL logo" /></div>
+            <div class="footer-logo-shell"><img class="footer-logo" src="${this.getLogoPath("bcl", "assets/images/bcl-logo.png")}" alt="BCL logo" data-site-logo="bcl" /></div>
             <p>Brisbane Champions League is a premium multicultural cricket platform built for fixtures, standings, teams, news, sponsors and matchday storytelling.</p>
           </div>
           <div class="footer-brand-panel">
-            <div class="footer-logo-shell small"><img class="footer-logo partner" src="assets/images/amcc-logo-white.png" alt="AMCC logo" /></div>
+            <div class="footer-logo-shell small"><img class="footer-logo partner" src="${this.getLogoPath("amcc", "assets/images/amcc-logo-white.png")}" alt="AMCC logo" data-site-logo="amcc" /></div>
             <p>In partnership with the Australian Multicultural Cricket Council, supporting community pathways and stronger digital presentation for the sport.</p>
           </div>
           <div>
@@ -145,6 +146,22 @@ const BCL = {
   setYear() {
     document.querySelectorAll("[data-year]").forEach((node) => {
       node.textContent = new Date().getFullYear();
+    });
+  },
+
+  getLogoPath(key, fallback = "") {
+    return this.site?.logoPaths?.[key] || fallback;
+  },
+
+  applyConfiguredLogos() {
+    const paths = {
+      bcl: this.resolveMediaUrl(this.getLogoPath("bcl", "assets/images/bcl-logo.png")),
+      amcc: this.resolveMediaUrl(this.getLogoPath("amcc", "assets/images/amcc-logo-white.png"))
+    };
+
+    document.querySelectorAll("[data-site-logo]").forEach((img) => {
+      const key = img.dataset.siteLogo;
+      if (key && paths[key]) img.src = paths[key];
     });
   },
 
@@ -207,6 +224,7 @@ const BCL = {
       const txt = document.querySelector("#hero-whatsapp-text");
       if (txt && socialText.whatsapp) txt.textContent = socialText.whatsapp;
     }
+    this.applyConfiguredLogos();
   },
 
   async fetchJson(url) {
@@ -713,17 +731,16 @@ const BCL = {
     };
   },
 
-  async renderTeams(selector, limit = 999) {
+  async renderTeams(selector, limit = 999, compact = false) {
     const mount = document.querySelector(selector);
     if (!mount) return;
     const teamData = await this.getTeams();
     mount.innerHTML = teamData.teams.slice(0, limit).map((team) => {
       const logo = this.findTeamLogo(team);
       const initials = this.getInitials(team.name);
-      const record = typeof team.won !== "undefined" ? `${team.won}-${team.lost}${team.nr ? `-${team.nr}` : ""}` : "TBC";
       const standing = team.position ? `#${team.position}` : "Team";
       return `
-        <article class="team-card">
+        <article class="team-card team-card-simple ${compact ? 'team-card-compact' : ''}">
           <div class="team-mark" style="--team-primary:${team.primaryColor || '#1F3A8A'};--team-secondary:${team.secondaryColor || '#2563EB'};">
             <img src="${logo}" alt="${team.name} logo" loading="lazy" onerror="this.parentElement.classList.add('no-logo')" />
             <span class="team-badge">${initials}</span>
@@ -734,14 +751,6 @@ const BCL = {
               <span class="team-rank">${standing}</span>
             </div>
             <h3>${team.name}</h3>
-            <p class="team-location">${team.city || "Official league franchise"}</p>
-            <p>${team.summary || "Official team profile. Update the club details from data/teams.json whenever you are ready."}</p>
-            <dl class="team-meta">
-              <div><dt>Group</dt><dd>${team.group || "—"}</dd></div>
-              <div><dt>Record</dt><dd>${record}</dd></div>
-              <div><dt>Points</dt><dd>${team.points ?? "—"}</dd></div>
-              <div><dt>Home Ground</dt><dd>${team.homeGround || "TBC"}</dd></div>
-            </dl>
           </div>
         </article>
       `;

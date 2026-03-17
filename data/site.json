@@ -28,5 +28,9 @@
   "socialText": {
     "facebook": "Facebook",
     "whatsapp": "WhatsApp"
+  },
+  "logoPaths": {
+    "bcl": "assets/images/bcl-logo.png",
+    "amcc": "assets/images/amcc-logo-white.png"
   }
 }

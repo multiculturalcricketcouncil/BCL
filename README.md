@@ -58,7 +58,7 @@ You can point each one to a local file inside `assets/images/` or to an external
 
 ### 6) BCL and AMCC logos
 Current logo files:
-- `assets/images/bcl-logo-white.png`
+- `assets/images/bcl-logo.png`
 - `assets/images/amcc-logo-white.png`
 
 These versions are used in the header / footer for better visibility in the dark layout.
@@ -129,3 +129,6 @@ The Facebook and WhatsApp buttons in the homepage banner are also controlled fro
 - `socialLinks.whatsapp`: WhatsApp URL (for example a `wa.me` link)
 - `socialText.facebook`: label text for the Facebook button
 - `socialText.whatsapp`: label text for the WhatsApp button
+
+
+Logo paths are editable in `data/site.json` under `logoPaths.bcl` and `logoPaths.amcc`.
